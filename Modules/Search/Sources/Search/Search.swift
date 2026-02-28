@@ -4,6 +4,7 @@ import Home
 public struct SearchFeatureView: View {
     @Binding private var searchText: String
     @State private var isSearchPresented = true
+    @State private var activitiesTopInset: CGFloat = 210
 
     public init(searchText: Binding<String>) {
         self._searchText = searchText
@@ -14,7 +15,8 @@ public struct SearchFeatureView: View {
             HomeFeatureView(
                 searchText: searchText,
                 isSearchPresented: isSearchPresented,
-                showsOnlyActivities: true
+                showsOnlyActivities: true,
+                activitiesTopInset: activitiesTopInset
             )
         }
         .searchable(
@@ -23,14 +25,19 @@ public struct SearchFeatureView: View {
             placement: .automatic,
             prompt: "Search activities"
         )
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .onAppear {
             DispatchQueue.main.async {
                 isSearchPresented = true
+                withAnimation(.easeInOut(duration: 0.45)) {
+                    activitiesTopInset = 0
+                }
             }
         }
         .onDisappear {
             isSearchPresented = false
             searchText = ""
+            activitiesTopInset = 210
         }
     }
 }

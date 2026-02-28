@@ -5,6 +5,7 @@ struct HomeScreen: View {
 
     let searchContext: HomeSearchContext
     let showsOnlyActivities: Bool
+    let activitiesTopInset: CGFloat
 
     private var visibleActivities: [ActivityItem] {
         viewModel.filteredActivities(using: searchContext.text)
@@ -27,6 +28,12 @@ struct HomeScreen: View {
                         }
                     }
                     .animation(.easeInOut(duration: 0.45), value: shouldShowMainSections)
+
+                    if showsOnlyActivities {
+                        Color.clear
+                            .frame(height: activitiesTopInset)
+                            .animation(.easeInOut(duration: 0.45), value: activitiesTopInset)
+                    }
 
                     activitySection
 
@@ -58,13 +65,13 @@ struct HomeScreen: View {
     private var activitySection: some View {
         HomeActivitySection(
             activities: visibleActivities,
-            title: searchContext.isSearching ? "Search Activities" : "Recent Activity",
-            trailingTitle: searchContext.isSearching ? nil : "See all"
+            title: showsOnlyActivities ? "Recent Activity" : (searchContext.isSearching ? "Search Activities" : "Recent Activity"),
+            trailingTitle: showsOnlyActivities ? nil : "See all"
         )
         .transition(.opacity)
     }
 }
 
 #Preview {
-    HomeScreen(searchContext: .empty, showsOnlyActivities: false)
+    HomeScreen(searchContext: .empty, showsOnlyActivities: false, activitiesTopInset: 0)
 }
