@@ -17,19 +17,25 @@ struct HomeSearchContext {
 
 public struct HomeFeatureView: View {
     private let searchContext: HomeSearchContext
+    private let showsOnlyActivities: Bool
 
     public init(
         searchText: String = "",
-        isSearchPresented: Bool = false
+        isSearchPresented: Bool = false,
+        showsOnlyActivities: Bool = false
     ) {
         self.searchContext = HomeSearchContext(
             text: searchText,
             isPresented: isSearchPresented
         )
+        self.showsOnlyActivities = showsOnlyActivities
     }
 
     public var body: some View {
-        HomeScreen(searchContext: searchContext)
+        HomeScreen(
+            searchContext: searchContext,
+            showsOnlyActivities: showsOnlyActivities
+        )
     }
 }
 

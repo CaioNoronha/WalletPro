@@ -4,9 +4,14 @@ struct HomeScreen: View {
     @State private var viewModel = HomeViewModel()
 
     let searchContext: HomeSearchContext
+    let showsOnlyActivities: Bool
 
     private var visibleActivities: [ActivityItem] {
         viewModel.filteredActivities(using: searchContext.text)
+    }
+
+    private var shouldShowMainSections: Bool {
+        showsOnlyActivities == false && searchContext.isSearching == false
     }
 
     var body: some View {
@@ -17,11 +22,11 @@ struct HomeScreen: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 24) {
                     Group {
-                        if searchContext.isSearching == false {
+                        if shouldShowMainSections {
                             mainSections
                         }
                     }
-                    .animation(.easeInOut(duration: 0.30), value: searchContext.isSearching)
+                    .animation(.easeInOut(duration: 0.45), value: shouldShowMainSections)
 
                     activitySection
 
@@ -61,5 +66,5 @@ struct HomeScreen: View {
 }
 
 #Preview {
-    HomeScreen(searchContext: .empty)
+    HomeScreen(searchContext: .empty, showsOnlyActivities: false)
 }

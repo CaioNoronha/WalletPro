@@ -13,7 +13,8 @@ public struct SearchFeatureView: View {
         NavigationStack {
             HomeFeatureView(
                 searchText: searchText,
-                isSearchPresented: isSearchPresented
+                isSearchPresented: isSearchPresented,
+                showsOnlyActivities: true
             )
         }
         .searchable(
