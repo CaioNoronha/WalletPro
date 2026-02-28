@@ -33,7 +33,9 @@
 		30BFCEB82F526C57003E513B /* Exceptions for "WalletPro" folder in "WalletPro" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				DesignSystem,
 				Home,
+				Navigation,
 			);
 			target = 30D10A852F5269D600C4A25A /* WalletPro */;
 		};
