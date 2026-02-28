@@ -4,10 +4,8 @@ import Observation
 @MainActor
 @Observable
 final class HomeViewModel {
-    let user = WalletUser(
-        firstName: "Cooper",
-        subtitle: "Ready to start your today"
-    )
+    let user = "Cooper"
+    var isBalanceHidden = false
 
     let balance = BalanceSummary(
         title: "My Balance",
@@ -37,7 +35,11 @@ final class HomeViewModel {
         ActivityItem(id: "a3", title: "Transfer to From", status: .failed, amountText: "$27", avatarText: "F")
     ]
 
-    var formattedBalance: String {
+    var displayBalance: String {
+        if isBalanceHidden {
+            return "••••••••"
+        }
+
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 2
@@ -46,5 +48,9 @@ final class HomeViewModel {
         let value = NSDecimalNumber(decimal: balance.amount)
         let amountText = formatter.string(from: value) ?? "0.00"
         return "\(balance.currencySymbol)\(amountText)"
+    }
+
+    func toggleBalanceVisibility() {
+        isBalanceHidden.toggle()
     }
 }
