@@ -8,7 +8,7 @@ public struct NavigationRootView: View {
     @State private var previousTab: AppTab = .home
     @State private var searchText = ""
     @State private var homeEntryTransitionToken = 0
-    @State private var homeEntryStartInset: CGFloat = 0
+    @State private var homeEntryTransitionSource: HomeFeatureEntryTransitionSource = .none
 
     public init() {}
 
@@ -16,8 +16,8 @@ public struct NavigationRootView: View {
         TabView(selection: $selectedTab) {
             Tab("Home", systemImage: "house", value: AppTab.home) {
                 HomeFeatureView(
-                    homeEntryTransitionToken: homeEntryTransitionToken,
-                    homeEntryStartInset: homeEntryStartInset
+                    entryTransitionSource: homeEntryTransitionSource,
+                    entryTransitionToken: homeEntryTransitionToken
                 )
             }
 
@@ -40,8 +40,10 @@ public struct NavigationRootView: View {
         .tint(Color.ds.primary2)
         .onChange(of: selectedTab) {
             if previousTab == .search && selectedTab == .home {
-                homeEntryStartInset = 210
+                homeEntryTransitionSource = .search
                 homeEntryTransitionToken += 1
+            } else {
+                homeEntryTransitionSource = .none
             }
 
             previousTab = selectedTab

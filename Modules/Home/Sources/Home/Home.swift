@@ -15,38 +15,44 @@ struct HomeSearchContext {
     static let empty = HomeSearchContext(text: "", isPresented: false)
 }
 
+public enum HomeFeaturePresentationMode: Sendable {
+    case full
+    case searchOnly
+}
+
+public enum HomeFeatureEntryTransitionSource: Sendable {
+    case none
+    case search
+}
+
 public struct HomeFeatureView: View {
     private let searchContext: HomeSearchContext
-    private let showsOnlyActivities: Bool
-    private let activitiesTopInset: CGFloat
-    private let homeEntryTransitionToken: Int
-    private let homeEntryStartInset: CGFloat
+    private let presentationMode: HomeFeaturePresentationMode
+    private let entryTransitionSource: HomeFeatureEntryTransitionSource
+    private let entryTransitionToken: Int
 
     public init(
         searchText: String = "",
         isSearchPresented: Bool = false,
-        showsOnlyActivities: Bool = false,
-        activitiesTopInset: CGFloat = 0,
-        homeEntryTransitionToken: Int = 0,
-        homeEntryStartInset: CGFloat = 0
+        presentationMode: HomeFeaturePresentationMode = .full,
+        entryTransitionSource: HomeFeatureEntryTransitionSource = .none,
+        entryTransitionToken: Int = 0
     ) {
         self.searchContext = HomeSearchContext(
             text: searchText,
             isPresented: isSearchPresented
         )
-        self.showsOnlyActivities = showsOnlyActivities
-        self.activitiesTopInset = activitiesTopInset
-        self.homeEntryTransitionToken = homeEntryTransitionToken
-        self.homeEntryStartInset = homeEntryStartInset
+        self.presentationMode = presentationMode
+        self.entryTransitionSource = entryTransitionSource
+        self.entryTransitionToken = entryTransitionToken
     }
 
     public var body: some View {
         HomeScreen(
             searchContext: searchContext,
-            showsOnlyActivities: showsOnlyActivities,
-            activitiesTopInset: activitiesTopInset,
-            homeEntryTransitionToken: homeEntryTransitionToken,
-            homeEntryStartInset: homeEntryStartInset
+            presentationMode: presentationMode,
+            entryTransitionSource: entryTransitionSource,
+            entryTransitionToken: entryTransitionToken
         )
     }
 }

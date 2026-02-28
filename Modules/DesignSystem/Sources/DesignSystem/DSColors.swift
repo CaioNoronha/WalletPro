@@ -19,6 +19,9 @@ public struct DSColors: Sendable {
             return Color(uiColor: uiColor)
         }
 
-        return .clear
+#if DEBUG
+        assertionFailure("Missing color asset. Tried '\(name)' and '\(fallback)'.")
+#endif
+        return .primary
     }
 }

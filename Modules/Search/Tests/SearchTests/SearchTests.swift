@@ -1,6 +1,9 @@
+import SwiftUI
 import Testing
 @testable import Search
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@MainActor
+@Test func createsSearchFeatureView() {
+    let view = SearchFeatureView(searchText: .constant(""))
+    #expect(String(describing: type(of: view)) == "SearchFeatureView")
 }

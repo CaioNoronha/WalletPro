@@ -5,6 +5,11 @@ struct HomeQuickActionsSection: View {
     let actions: [QuickAction]
 
     var body: some View {
+        quickActionsContent
+            .modifier(HomeQuickActionsGlassStyle())
+    }
+
+    private var quickActionsContent: some View {
         HStack(spacing: 10) {
             ForEach(actions) { action in
                 VStack(spacing: 10) {
@@ -22,6 +27,18 @@ struct HomeQuickActionsSection: View {
             }
         }
         .padding(.horizontal, 10)
-        .glassEffect(.regular, in: Capsule())
     }
 }
+private struct HomeQuickActionsGlassStyle: ViewModifier {
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect(.regular, in: Capsule())
+        } else {
+            content
+                .background(.ultraThinMaterial, in: Capsule())
+        }
+    }
+}
+

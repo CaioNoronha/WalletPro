@@ -1,6 +1,10 @@
 import Testing
 @testable import DesignSystem
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@Test func homeMotionTokensAreValid() {
+    #expect(DSMotion.HomeTransitions.sectionFadeDuration > 0)
+    #expect(DSMotion.HomeTransitions.homeEntrySlideDuration > 0)
+    #expect(DSMotion.HomeTransitions.homeEntryRevealDelay >= 0)
+    #expect(DSMotion.HomeTransitions.homeEntryRevealDuration > 0)
+    #expect(DSMotion.HomeTransitions.sharedEntryInset > 0)
 }

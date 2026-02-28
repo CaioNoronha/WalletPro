@@ -1,6 +1,8 @@
 import Testing
 @testable import Navigation
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@Test func appTabMetadataIsStable() {
+    #expect(AppTab.allCases.count == 5)
+    #expect(AppTab.home.title == "Home")
+    #expect(AppTab.search.systemImage == "magnifyingglass")
 }
