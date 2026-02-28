@@ -1,4 +1,5 @@
 import SwiftUI
+import DesignSystem
 
 struct HomeQuickActionsSection: View {
     let actions: [QuickAction]
@@ -15,7 +16,7 @@ struct HomeQuickActionsSection: View {
                         .font(.footnote.weight(.medium))
                         .lineLimit(1)
                 }
-                .foregroundStyle(.primary)
+                .foregroundStyle(Color.ds.primary1)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
             }

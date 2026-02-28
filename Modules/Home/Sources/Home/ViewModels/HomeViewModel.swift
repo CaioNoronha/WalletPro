@@ -24,8 +24,8 @@ final class HomeViewModel {
         ActivityItem(id: "a1", title: "Transfer to Andi", status: .success, amountText: "$34", avatarText: "A"),
         ActivityItem(id: "a2", title: "Top Up to Klarna", status: .success, amountText: "$90", avatarText: "K."),
         ActivityItem(id: "a3", title: "Transfer to Andry", status: .failed, amountText: "$27", avatarText: "C"),
-        ActivityItem(id: "a3", title: "Top Up to Aero", status: .success, amountText: "$16", avatarText: "G"),
-        ActivityItem(id: "a3", title: "Top Up to Cleber", status: .success, amountText: "$47", avatarText: "A"),
+        ActivityItem(id: "a4", title: "Top Up to Aero", status: .success, amountText: "$16", avatarText: "G"),
+        ActivityItem(id: "a5", title: "Top Up to Cleber", status: .success, amountText: "$47", avatarText: "A")
     ]
 
     var displayBalance: String {
@@ -43,6 +43,16 @@ final class HomeViewModel {
         return "\(balance.currencySymbol)\(amountText)"
     }
 
+    func filteredActivities(using query: String) -> [ActivityItem] {
+        let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard normalizedQuery.isEmpty == false else { return activities }
+
+        return activities.filter { item in
+            item.title.localizedCaseInsensitiveContains(normalizedQuery)
+                || item.status.title.localizedCaseInsensitiveContains(normalizedQuery)
+                || item.amountText.localizedCaseInsensitiveContains(normalizedQuery)
+        }
+    }
 
     func toggleBalanceVisibility() {
         isBalanceHidden.toggle()

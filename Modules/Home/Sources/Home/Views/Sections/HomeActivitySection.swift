@@ -2,36 +2,46 @@ import SwiftUI
 
 struct HomeActivitySection: View {
     let activities: [ActivityItem]
+    var title: String = "Recent Activity"
+    var trailingTitle: String? = "See all"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HomeSectionHeader(title: "Recent Activity", trailingTitle: "See all")
+            HomeSectionHeader(title: title, trailingTitle: trailingTitle)
 
-            VStack(spacing: 2) {
-                ForEach(activities) { item in
-                    HStack(spacing: 12) {
-                        HomeActivityAvatar(avatarText: item.avatarText)
+            if activities.isEmpty {
+                Text("No activities found")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .padding(.vertical, 24)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            } else {
+                VStack(spacing: 2) {
+                    ForEach(activities) { item in
+                        HStack(spacing: 12) {
+                            HomeActivityAvatar(avatarText: item.avatarText)
 
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(item.title)
-                                .font(.headline.weight(.medium))
-                                .foregroundStyle(.primary)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.title)
+                                    .font(.headline.weight(.medium))
+                                    .foregroundStyle(.primary)
 
-                            Text(item.status.title)
-                                .font(.subheadline.weight(.semibold))
+                                Text(item.status.title)
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(.primary)
+                            }
+
+                            Spacer()
+
+                            Text(item.amountText)
+                                .font(.title3.weight(.semibold))
                                 .foregroundStyle(.primary)
                         }
+                        .padding(.vertical, 8)
 
-                        Spacer()
-
-                        Text(item.amountText)
-                            .font(.title3.weight(.semibold))
-                            .foregroundStyle(.primary)
-                    }
-                    .padding(.vertical, 8)
-
-                    if item.id != activities.last?.id {
-                        Divider().overlay(.white.opacity(0.12))
+                        if item.id != activities.last?.id {
+                            Divider().overlay(.white.opacity(0.12))
+                        }
                     }
                 }
             }
