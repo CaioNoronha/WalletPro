@@ -3,14 +3,11 @@ import DesignSystem
 
 struct HomeScreen: View {
     @State private var viewModel = HomeViewModel()
-    @State private var isAnimatingHomeEntry = false
-    @State private var homeEntryInset: CGFloat = 0
-    @State private var searchEntryInset: CGFloat = DSMotion.HomeTransitions.sharedEntryInset
+    @State private var transitionController = HomeEntryTransitionController()
 
     let searchContext: HomeSearchContext
     let presentationMode: HomeFeaturePresentationMode
-    let entryTransitionSource: HomeFeatureEntryTransitionSource
-    let entryTransitionToken: Int
+    let entryTransition: DSMotion.HomeTransitions.Entry.Transition
 
     private var visibleActivities: [ActivityItem] {
         viewModel.filteredActivities(using: searchContext.text)
@@ -21,13 +18,13 @@ struct HomeScreen: View {
     }
 
     private var effectiveActivitiesTopInset: CGFloat {
-        isSearchOnly ? searchEntryInset : homeEntryInset
+        isSearchOnly ? transitionController.searchEntryInset : transitionController.homeEntryInset
     }
 
     private var shouldShowMainSections: Bool {
         isSearchOnly == false
             && searchContext.isSearching == false
-            && isAnimatingHomeEntry == false
+            && transitionController.isAnimatingHomeEntry == false
     }
 
     var body: some View {
@@ -42,12 +39,12 @@ struct HomeScreen: View {
                             mainSections
                         }
                     }
-                    .animation(.easeInOut(duration: DSMotion.HomeTransitions.sectionFadeDuration), value: shouldShowMainSections)
+                    .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.sectionFade), value: shouldShowMainSections)
 
                     if effectiveActivitiesTopInset > 0 {
                         Color.clear
                             .frame(height: effectiveActivitiesTopInset)
-                            .animation(.easeInOut(duration: DSMotion.HomeTransitions.homeEntrySlideDuration), value: effectiveActivitiesTopInset)
+                            .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.entrySlide), value: effectiveActivitiesTopInset)
                     }
 
                     activitySection
@@ -59,10 +56,13 @@ struct HomeScreen: View {
             }
         }
         .onAppear {
-            runSearchEntryTransitionIfNeeded()
+            transitionController.runSearchEntryTransitionIfNeeded(isSearchOnly: isSearchOnly)
         }
-        .onChange(of: entryTransitionToken) {
-            runHomeEntryTransitionIfNeeded()
+        .onChange(of: entryTransition) {
+            transitionController.runHomeEntryTransitionIfNeeded(
+                isSearchOnly: isSearchOnly,
+                entryTransition: entryTransition
+            )
         }
     }
 
@@ -91,41 +91,12 @@ struct HomeScreen: View {
         )
         .transition(.opacity)
     }
-
-    private func runSearchEntryTransitionIfNeeded() {
-        guard isSearchOnly else { return }
-
-        searchEntryInset = DSMotion.HomeTransitions.sharedEntryInset
-        withAnimation(.easeInOut(duration: DSMotion.HomeTransitions.homeEntrySlideDuration)) {
-            searchEntryInset = 0
-        }
-    }
-
-    private func runHomeEntryTransitionIfNeeded() {
-        guard isSearchOnly == false, entryTransitionSource == .search else {
-            return
-        }
-
-        isAnimatingHomeEntry = true
-        homeEntryInset = DSMotion.HomeTransitions.sharedEntryInset
-
-        withAnimation(.easeInOut(duration: DSMotion.HomeTransitions.homeEntrySlideDuration)) {
-            homeEntryInset = 0
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + DSMotion.HomeTransitions.homeEntryRevealDelay) {
-            withAnimation(.easeInOut(duration: DSMotion.HomeTransitions.homeEntryRevealDuration)) {
-                isAnimatingHomeEntry = false
-            }
-        }
-    }
 }
 
 #Preview {
     HomeScreen(
         searchContext: .empty,
         presentationMode: .full,
-        entryTransitionSource: .none,
-        entryTransitionToken: 0
+        entryTransition: .none
     )
 }

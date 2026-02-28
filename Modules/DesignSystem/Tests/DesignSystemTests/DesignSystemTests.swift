@@ -2,9 +2,9 @@ import Testing
 @testable import DesignSystem
 
 @Test func homeMotionTokensAreValid() {
-    #expect(DSMotion.HomeTransitions.sectionFadeDuration > 0)
-    #expect(DSMotion.HomeTransitions.homeEntrySlideDuration > 0)
-    #expect(DSMotion.HomeTransitions.homeEntryRevealDelay >= 0)
-    #expect(DSMotion.HomeTransitions.homeEntryRevealDuration > 0)
-    #expect(DSMotion.HomeTransitions.sharedEntryInset > 0)
+    #expect(DSMotion.HomeTransitions.Duration.sectionFade > 0)
+    #expect(DSMotion.HomeTransitions.Duration.entrySlide > 0)
+    #expect(DSMotion.HomeTransitions.Delay.entryReveal >= 0)
+    #expect(DSMotion.HomeTransitions.Duration.entryReveal > 0)
+    #expect(DSMotion.HomeTransitions.Entry.sharedInset > 0)
 }

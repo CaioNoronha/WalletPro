@@ -4,25 +4,14 @@ import Search
 import DesignSystem
 
 public struct NavigationRootView: View {
-    @State private var selectedTab: AppTab = .home
-    @State private var previousTab: AppTab = .home
-    @State private var searchText = ""
-    @State private var homeEntryTransitionToken = 0
-    @State private var homeEntryTransitionSource: HomeFeatureEntryTransitionSource = .none
+    @State private var coordinator = NavigationCoordinator()
 
     public init() {}
 
     public var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: selectedTabBinding) {
             Tab("Home", systemImage: "house", value: AppTab.home) {
-                HomeFeatureView(
-                    entryTransitionSource: homeEntryTransitionSource,
-                    entryTransitionToken: homeEntryTransitionToken
-                )
-            }
-
-            Tab("Activity", systemImage: "chart.bar.xaxis", value: AppTab.activity) {
-                NavigationPlaceholderView(title: "Activity", systemImage: "chart.bar.xaxis")
+                HomeFeatureView(entryTransition: coordinator.homeEntryTransition)
             }
 
             Tab("Rewards", systemImage: "gift", value: AppTab.rewards) {
@@ -34,20 +23,24 @@ public struct NavigationRootView: View {
             }
 
             Tab(value: AppTab.search, role: .search) {
-                SearchFeatureView(searchText: $searchText)
+                SearchFeatureView(searchText: searchTextBinding)
             }
         }
         .tint(Color.ds.primary2)
-        .onChange(of: selectedTab) {
-            if previousTab == .search && selectedTab == .home {
-                homeEntryTransitionSource = .search
-                homeEntryTransitionToken += 1
-            } else {
-                homeEntryTransitionSource = .none
-            }
+    }
 
-            previousTab = selectedTab
-        }
+    private var selectedTabBinding: Binding<AppTab> {
+        Binding(
+            get: { coordinator.selectedTab },
+            set: { coordinator.selectTab($0) }
+        )
+    }
+
+    private var searchTextBinding: Binding<String> {
+        Binding(
+            get: { coordinator.searchText },
+            set: { coordinator.searchText = $0 }
+        )
     }
 }
 

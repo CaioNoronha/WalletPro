@@ -1,4 +1,5 @@
 import SwiftUI
+import DesignSystem
 
 struct HomeSearchContext {
     let text: String
@@ -20,39 +21,30 @@ public enum HomeFeaturePresentationMode: Sendable {
     case searchOnly
 }
 
-public enum HomeFeatureEntryTransitionSource: Sendable {
-    case none
-    case search
-}
-
 public struct HomeFeatureView: View {
     private let searchContext: HomeSearchContext
     private let presentationMode: HomeFeaturePresentationMode
-    private let entryTransitionSource: HomeFeatureEntryTransitionSource
-    private let entryTransitionToken: Int
+    private let entryTransition: DSMotion.HomeTransitions.Entry.Transition
 
     public init(
         searchText: String = "",
         isSearchPresented: Bool = false,
         presentationMode: HomeFeaturePresentationMode = .full,
-        entryTransitionSource: HomeFeatureEntryTransitionSource = .none,
-        entryTransitionToken: Int = 0
+        entryTransition: DSMotion.HomeTransitions.Entry.Transition = .none
     ) {
         self.searchContext = HomeSearchContext(
             text: searchText,
             isPresented: isSearchPresented
         )
         self.presentationMode = presentationMode
-        self.entryTransitionSource = entryTransitionSource
-        self.entryTransitionToken = entryTransitionToken
+        self.entryTransition = entryTransition
     }
 
     public var body: some View {
         HomeScreen(
             searchContext: searchContext,
             presentationMode: presentationMode,
-            entryTransitionSource: entryTransitionSource,
-            entryTransitionToken: entryTransitionToken
+            entryTransition: entryTransition
         )
     }
 }
