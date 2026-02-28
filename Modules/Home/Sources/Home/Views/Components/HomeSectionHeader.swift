@@ -8,11 +8,11 @@ struct HomeSectionHeader: View {
         HStack {
             Text(title)
                 .font(.title3.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
             Spacer()
             Text(trailingTitle)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(.white.opacity(0.65))
+                .foregroundStyle(.primary)
         }
     }
 }

@@ -14,7 +14,7 @@ struct HomeQuickActionsSection: View {
                         .font(.footnote.weight(.medium))
                         .lineLimit(1)
                 }
-                .foregroundStyle(.white.opacity(0.96))
+                .foregroundStyle(.primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
             }

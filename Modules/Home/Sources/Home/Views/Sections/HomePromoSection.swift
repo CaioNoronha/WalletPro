@@ -27,24 +27,24 @@ struct HomePromoSection: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(promo.title)
                         .font(.title3)
-                        .foregroundStyle(.white.opacity(0.86))
+                        .foregroundStyle(.primary)
 
                     Text(promo.discountText)
                         .font(.system(size: 58, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
 
                     Text(promo.subtitle)
                         .font(.headline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
+                        .foregroundStyle(.primary)
 
                     Text(promo.dateRange)
                         .font(.callout)
-                        .foregroundStyle(.white.opacity(0.8))
+                        .foregroundStyle(.primary)
                         .padding(.top, 2)
 
                     Text(promo.legalText)
                         .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.62))
+                        .foregroundStyle(.primary)
                         .padding(.top, 4)
                 }
                 .padding(20)
@@ -52,7 +52,7 @@ struct HomePromoSection: View {
 
                 Text(promo.ctaTitle)
                     .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .padding(.horizontal, 13)
                     .padding(.vertical, 8)
                     .background(

@@ -15,18 +15,18 @@ struct HomeActivitySection: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(item.title)
                                 .font(.headline.weight(.medium))
-                                .foregroundStyle(.white.opacity(0.92))
+                                .foregroundStyle(.primary)
 
                             Text(item.status.title)
                                 .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(item.status == .success ? .green : .red)
+                                .foregroundStyle(.primary)
                         }
 
                         Spacer()
 
                         Text(item.amountText)
                             .font(.title3.weight(.semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
                     }
                     .padding(.vertical, 8)
 

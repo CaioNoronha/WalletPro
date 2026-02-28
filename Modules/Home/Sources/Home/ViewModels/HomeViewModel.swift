@@ -8,7 +8,7 @@ final class HomeViewModel {
     var isBalanceHidden = false
 
     let balance = BalanceSummary(
-        title: "Your balance",
+        title: "My Balance",
         amount: 3890.99,
         currencySymbol: "$"
     )
@@ -49,6 +49,7 @@ final class HomeViewModel {
         let amountText = formatter.string(from: value) ?? "0.00"
         return "\(balance.currencySymbol)\(amountText)"
     }
+
 
     func toggleBalanceVisibility() {
         isBalanceHidden.toggle()

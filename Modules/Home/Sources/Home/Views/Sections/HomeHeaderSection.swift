@@ -13,7 +13,7 @@ struct HomeHeaderSection: View {
             Button {
             } label: {
                 Image(systemName: "bell")
-                    .foregroundStyle(.white.opacity(0.92))
+                    .foregroundStyle(.primary)
                     .frame(width: 44, height: 44)
                     .overlay(alignment: .topTrailing) {
                         Circle()
