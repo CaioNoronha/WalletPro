@@ -35,6 +35,7 @@
 		30BFCEDD2F527482003E513B /* Navigation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Navigation; sourceTree = "<group>"; };
 		30BFCEDE2F5274A6003E513B /* DesignSystem */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DesignSystem; sourceTree = "<group>"; };
 		30BFCEE52F52779F003E513B /* WalletProApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletProApp.swift; sourceTree = "<group>"; };
+		30BFCF0D2F52A146003E513B /* Search */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Search; sourceTree = "<group>"; };
 		30D10A862F5269D600C4A25A /* WalletPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalletPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D10A932F5269D700C4A25A /* WalletProTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletProTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D10A9D2F5269D700C4A25A /* WalletProUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletProUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +83,7 @@
 		30BFCEDA2F5272E7003E513B /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				30BFCF0D2F52A146003E513B /* Search */,
 				30BFCEDE2F5274A6003E513B /* DesignSystem */,
 				30BFCEDD2F527482003E513B /* Navigation */,
 				30BFCEDB2F527390003E513B /* Home */,
@@ -299,30 +301,6 @@
 			targetProxy = 30D10A9E2F5269D700C4A25A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/Home;
-		};
-		30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/Navigation;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		30C100052F60000100AAA001 /* Home */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */;
-			productName = Home;
-		};
-		30C100092F60000100AAA001 /* Navigation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */;
-			productName = Navigation;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 		30D10AA52F5269D700C4A25A /* Debug */ = {
@@ -678,6 +656,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Home;
+		};
+		30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Navigation;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		30C100092F60000100AAA001 /* Navigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */;
+			productName = Navigation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 30D10A7E2F5269D600C4A25A /* Project object */;
 }

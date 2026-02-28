@@ -8,7 +8,7 @@ final class HomeViewModel {
     var isBalanceHidden = false
 
     let balance = BalanceSummary(
-        title: "My Balance",
+        title: "Your balance",
         amount: 3890.99,
         currencySymbol: "$"
     )
