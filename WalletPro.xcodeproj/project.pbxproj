@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		30BFCECF2F527124003E513B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30BFCEC82F527124003E513B /* Assets.xcassets */; };
+		30BFCEE62F52779F003E513B /* WalletProApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFCEE52F52779F003E513B /* WalletProApp.swift */; };
+		30C100032F60000100AAA001 /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = 30C100052F60000100AAA001 /* Home */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,7 @@
 		30BFCEDB2F527390003E513B /* Home */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Home; sourceTree = "<group>"; };
 		30BFCEDD2F527482003E513B /* Navigation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Navigation; sourceTree = "<group>"; };
 		30BFCEDE2F5274A6003E513B /* DesignSystem */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DesignSystem; sourceTree = "<group>"; };
+		30BFCEE52F52779F003E513B /* WalletProApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletProApp.swift; sourceTree = "<group>"; };
 		30D10A862F5269D600C4A25A /* WalletPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalletPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D10A932F5269D700C4A25A /* WalletProTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletProTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D10A9D2F5269D700C4A25A /* WalletProUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletProUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30C100032F60000100AAA001 /* Home in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +100,7 @@
 		30D10A7D2F5269D600C4A25A = {
 			isa = PBXGroup;
 			children = (
+				30BFCEE52F52779F003E513B /* WalletProApp.swift */,
 				30BFCEDA2F5272E7003E513B /* Modules */,
 				30BFCEDC2F5273F1003E513B /* Resources */,
 				30D10A962F5269D700C4A25A /* WalletProTests */,
@@ -131,6 +136,7 @@
 			);
 			name = WalletPro;
 			packageProductDependencies = (
+				30C100052F60000100AAA001 /* Home */,
 			);
 			productName = WalletPro;
 			productReference = 30D10A862F5269D600C4A25A /* WalletPro.app */;
@@ -194,6 +200,7 @@
 				TargetAttributes = {
 					30D10A852F5269D600C4A25A = {
 						CreatedOnToolsVersion = 26.3;
+						LastSwiftMigration = 2630;
 					};
 					30D10A922F5269D700C4A25A = {
 						CreatedOnToolsVersion = 26.3;
@@ -214,6 +221,9 @@
 			);
 			mainGroup = 30D10A7D2F5269D600C4A25A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 30D10A872F5269D600C4A25A /* Products */;
 			projectDirPath = "";
@@ -256,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30BFCEE62F52779F003E513B /* WalletProApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +298,21 @@
 			targetProxy = 30D10A9E2F5269D700C4A25A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Home;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		30C100052F60000100AAA001 /* Home */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */;
+			productName = Home;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 		30D10AA52F5269D700C4A25A /* Debug */ = {
@@ -410,6 +436,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = AH8399ZQQN;
@@ -424,6 +451,8 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_UIColorName[sdk=iphoneos*]" = LaunchBackground;
+				"INFOPLIST_KEY_UILaunchScreen_UIColorName[sdk=iphonesimulator*]" = LaunchBackground;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -442,6 +471,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
@@ -454,6 +484,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = AH8399ZQQN;
@@ -468,6 +499,8 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_UIColorName[sdk=iphoneos*]" = LaunchBackground;
+				"INFOPLIST_KEY_UILaunchScreen_UIColorName[sdk=iphonesimulator*]" = LaunchBackground;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
