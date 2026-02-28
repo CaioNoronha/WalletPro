@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		30BFCECF2F527124003E513B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30BFCEC82F527124003E513B /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		30D10A942F5269D700C4A25A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,32 +28,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		30BFCEC82F527124003E513B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		30BFCEDB2F527390003E513B /* Home */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Home; sourceTree = "<group>"; };
+		30BFCEDD2F527482003E513B /* Navigation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Navigation; sourceTree = "<group>"; };
+		30BFCEDE2F5274A6003E513B /* DesignSystem */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DesignSystem; sourceTree = "<group>"; };
 		30D10A862F5269D600C4A25A /* WalletPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalletPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D10A932F5269D700C4A25A /* WalletProTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletProTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D10A9D2F5269D700C4A25A /* WalletProUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletProUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		30BFCEB82F526C57003E513B /* Exceptions for "WalletPro" folder in "WalletPro" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				DesignSystem,
-				Home,
-				Navigation,
-			);
-			target = 30D10A852F5269D600C4A25A /* WalletPro */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		30D10A882F5269D600C4A25A /* WalletPro */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				30BFCEB82F526C57003E513B /* Exceptions for "WalletPro" folder in "WalletPro" target */,
-			);
-			path = WalletPro;
-			sourceTree = "<group>";
-		};
 		30D10A962F5269D700C4A25A /* WalletProTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = WalletProTests;
@@ -87,10 +75,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		30BFCEDA2F5272E7003E513B /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				30BFCEDE2F5274A6003E513B /* DesignSystem */,
+				30BFCEDD2F527482003E513B /* Navigation */,
+				30BFCEDB2F527390003E513B /* Home */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		30BFCEDC2F5273F1003E513B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				30BFCEC82F527124003E513B /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		30D10A7D2F5269D600C4A25A = {
 			isa = PBXGroup;
 			children = (
-				30D10A882F5269D600C4A25A /* WalletPro */,
+				30BFCEDA2F5272E7003E513B /* Modules */,
+				30BFCEDC2F5273F1003E513B /* Resources */,
 				30D10A962F5269D700C4A25A /* WalletProTests */,
 				30D10AA02F5269D700C4A25A /* WalletProUITests */,
 				30D10A872F5269D600C4A25A /* Products */,
@@ -121,9 +128,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				30D10A882F5269D600C4A25A /* WalletPro */,
 			);
 			name = WalletPro;
 			packageProductDependencies = (
@@ -227,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30BFCECF2F527124003E513B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
