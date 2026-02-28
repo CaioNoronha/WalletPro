@@ -29,6 +29,7 @@ public struct NavigationRootView: View {
                 NavigationNativeSearchTabView(searchText: $searchText)
             }
         }
+        .tint(Color(red: 0.78, green: 0.58, blue: 0.98))
     }
 }
 
