@@ -19,12 +19,16 @@ public struct HomeFeatureView: View {
     private let searchContext: HomeSearchContext
     private let showsOnlyActivities: Bool
     private let activitiesTopInset: CGFloat
+    private let homeEntryTransitionToken: Int
+    private let homeEntryStartInset: CGFloat
 
     public init(
         searchText: String = "",
         isSearchPresented: Bool = false,
         showsOnlyActivities: Bool = false,
-        activitiesTopInset: CGFloat = 0
+        activitiesTopInset: CGFloat = 0,
+        homeEntryTransitionToken: Int = 0,
+        homeEntryStartInset: CGFloat = 0
     ) {
         self.searchContext = HomeSearchContext(
             text: searchText,
@@ -32,13 +36,17 @@ public struct HomeFeatureView: View {
         )
         self.showsOnlyActivities = showsOnlyActivities
         self.activitiesTopInset = activitiesTopInset
+        self.homeEntryTransitionToken = homeEntryTransitionToken
+        self.homeEntryStartInset = homeEntryStartInset
     }
 
     public var body: some View {
         HomeScreen(
             searchContext: searchContext,
             showsOnlyActivities: showsOnlyActivities,
-            activitiesTopInset: activitiesTopInset
+            activitiesTopInset: activitiesTopInset,
+            homeEntryTransitionToken: homeEntryTransitionToken,
+            homeEntryStartInset: homeEntryStartInset
         )
     }
 }

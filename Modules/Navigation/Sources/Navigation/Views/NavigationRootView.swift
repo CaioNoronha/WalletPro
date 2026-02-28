@@ -5,14 +5,20 @@ import DesignSystem
 
 public struct NavigationRootView: View {
     @State private var selectedTab: AppTab = .home
+    @State private var previousTab: AppTab = .home
     @State private var searchText = ""
+    @State private var homeEntryTransitionToken = 0
+    @State private var homeEntryStartInset: CGFloat = 0
 
     public init() {}
 
     public var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Home", systemImage: "house", value: AppTab.home) {
-                HomeFeatureView()
+                HomeFeatureView(
+                    homeEntryTransitionToken: homeEntryTransitionToken,
+                    homeEntryStartInset: homeEntryStartInset
+                )
             }
 
             Tab("Activity", systemImage: "chart.bar.xaxis", value: AppTab.activity) {
@@ -32,6 +38,14 @@ public struct NavigationRootView: View {
             }
         }
         .tint(Color.ds.primary2)
+        .onChange(of: selectedTab) {
+            if previousTab == .search && selectedTab == .home {
+                homeEntryStartInset = 210
+                homeEntryTransitionToken += 1
+            }
+
+            previousTab = selectedTab
+        }
     }
 }
 

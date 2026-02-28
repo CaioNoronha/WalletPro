@@ -2,17 +2,27 @@ import SwiftUI
 
 struct HomeScreen: View {
     @State private var viewModel = HomeViewModel()
+    @State private var isAnimatingHomeEntry = false
+    @State private var homeEntryInset: CGFloat = 0
 
     let searchContext: HomeSearchContext
     let showsOnlyActivities: Bool
     let activitiesTopInset: CGFloat
+    let homeEntryTransitionToken: Int
+    let homeEntryStartInset: CGFloat
 
     private var visibleActivities: [ActivityItem] {
         viewModel.filteredActivities(using: searchContext.text)
     }
 
+    private var effectiveActivitiesTopInset: CGFloat {
+        showsOnlyActivities ? activitiesTopInset : homeEntryInset
+    }
+
     private var shouldShowMainSections: Bool {
-        showsOnlyActivities == false && searchContext.isSearching == false
+        showsOnlyActivities == false
+            && searchContext.isSearching == false
+            && isAnimatingHomeEntry == false
     }
 
     var body: some View {
@@ -27,12 +37,12 @@ struct HomeScreen: View {
                             mainSections
                         }
                     }
-                    .animation(.easeInOut(duration: 0.45), value: shouldShowMainSections)
+                    .animation(.easeInOut(duration: 0.36), value: shouldShowMainSections)
 
-                    if showsOnlyActivities {
+                    if effectiveActivitiesTopInset > 0 {
                         Color.clear
-                            .frame(height: activitiesTopInset)
-                            .animation(.easeInOut(duration: 0.45), value: activitiesTopInset)
+                            .frame(height: effectiveActivitiesTopInset)
+                            .animation(.easeInOut(duration: 0.36), value: effectiveActivitiesTopInset)
                     }
 
                     activitySection
@@ -42,6 +52,9 @@ struct HomeScreen: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 18)
             }
+        }
+        .onChange(of: homeEntryTransitionToken) {
+            runHomeEntryTransitionIfNeeded()
         }
     }
 
@@ -70,8 +83,33 @@ struct HomeScreen: View {
         )
         .transition(.opacity)
     }
+
+    private func runHomeEntryTransitionIfNeeded() {
+        guard showsOnlyActivities == false, homeEntryStartInset > 0 else {
+            return
+        }
+
+        isAnimatingHomeEntry = true
+        homeEntryInset = homeEntryStartInset
+
+        withAnimation(.easeInOut(duration: 0.36)) {
+            homeEntryInset = 0
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
+            withAnimation(.easeInOut(duration: 0.24)) {
+                isAnimatingHomeEntry = false
+            }
+        }
+    }
 }
 
 #Preview {
-    HomeScreen(searchContext: .empty, showsOnlyActivities: false, activitiesTopInset: 0)
+    HomeScreen(
+        searchContext: .empty,
+        showsOnlyActivities: false,
+        activitiesTopInset: 0,
+        homeEntryTransitionToken: 0,
+        homeEntryStartInset: 0
+    )
 }
