@@ -1,2 +1,2 @@
 # WalletPro
-A modular fintech iOS app.
+A modular fintech iOS app with SwiftUi.
