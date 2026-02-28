@@ -1,22 +1,35 @@
 import SwiftUI
 
+struct HomeSearchContext {
+    let text: String
+    let isPresented: Bool
+
+    var isSearching: Bool {
+        isPresented || normalizedText.isEmpty == false
+    }
+
+    var normalizedText: String {
+        text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    static let empty = HomeSearchContext(text: "", isPresented: false)
+}
+
 public struct HomeFeatureView: View {
-    private let searchText: Binding<String>
-    private let isSearchPresented: Binding<Bool>
+    private let searchContext: HomeSearchContext
 
     public init(
-        searchText: Binding<String> = .constant(""),
-        isSearchPresented: Binding<Bool> = .constant(false)
+        searchText: String = "",
+        isSearchPresented: Bool = false
     ) {
-        self.searchText = searchText
-        self.isSearchPresented = isSearchPresented
+        self.searchContext = HomeSearchContext(
+            text: searchText,
+            isPresented: isSearchPresented
+        )
     }
 
     public var body: some View {
-        HomeScreen(
-            searchText: searchText.wrappedValue,
-            isSearchPresented: isSearchPresented.wrappedValue
-        )
+        HomeScreen(searchContext: searchContext)
     }
 }
 

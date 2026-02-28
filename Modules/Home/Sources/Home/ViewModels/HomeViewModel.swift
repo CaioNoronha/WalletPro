@@ -21,11 +21,11 @@ final class HomeViewModel {
     ]
 
     let activities: [ActivityItem] = [
-        ActivityItem(id: "a1", title: "Transfer to Andi", status: .success, amountText: "$34", avatarText: "A"),
-        ActivityItem(id: "a2", title: "Top Up to Klarna", status: .success, amountText: "$90", avatarText: "K."),
-        ActivityItem(id: "a3", title: "Transfer to Andry", status: .failed, amountText: "$27", avatarText: "C"),
-        ActivityItem(id: "a4", title: "Top Up to Aero", status: .success, amountText: "$16", avatarText: "G"),
-        ActivityItem(id: "a5", title: "Top Up to Cleber", status: .success, amountText: "$47", avatarText: "A")
+        ActivityItem(id: "a1", title: "Transfer to Andi", dateText: "21 fev. 2026", status: .success, amountText: "$34", avatarText: "A"),
+        ActivityItem(id: "a2", title: "Top Up to Klarna", dateText: "20 fev. 2026", status: .success, amountText: "$90", avatarText: "K."),
+        ActivityItem(id: "a3", title: "Transfer to Andry", dateText: "19 fev. 2026", status: .failed, amountText: "$27", avatarText: "C"),
+        ActivityItem(id: "a4", title: "Top Up to Aero", dateText: "18 fev. 2026", status: .success, amountText: "$16", avatarText: "G"),
+        ActivityItem(id: "a5", title: "Top Up to Cleber", dateText: "17 fev. 2026", status: .success, amountText: "$47", avatarText: "A")
     ]
 
     var displayBalance: String {
@@ -48,13 +48,18 @@ final class HomeViewModel {
         guard normalizedQuery.isEmpty == false else { return activities }
 
         return activities.filter { item in
-            item.title.localizedCaseInsensitiveContains(normalizedQuery)
-                || item.status.title.localizedCaseInsensitiveContains(normalizedQuery)
-                || item.amountText.localizedCaseInsensitiveContains(normalizedQuery)
+            matches(item, query: normalizedQuery)
         }
     }
 
     func toggleBalanceVisibility() {
         isBalanceHidden.toggle()
+    }
+
+    private func matches(_ item: ActivityItem, query: String) -> Bool {
+        item.title.localizedCaseInsensitiveContains(query)
+            || item.dateText.localizedCaseInsensitiveContains(query)
+            || item.status.title.localizedCaseInsensitiveContains(query)
+            || item.amountText.localizedCaseInsensitiveContains(query)
     }
 }

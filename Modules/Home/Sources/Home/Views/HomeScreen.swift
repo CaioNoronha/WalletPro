@@ -3,15 +3,10 @@ import SwiftUI
 struct HomeScreen: View {
     @State private var viewModel = HomeViewModel()
 
-    let searchText: String
-    let isSearchPresented: Bool
-
-    private var isSearching: Bool {
-        isSearchPresented || searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-    }
+    let searchContext: HomeSearchContext
 
     private var visibleActivities: [ActivityItem] {
-        viewModel.filteredActivities(using: searchText)
+        viewModel.filteredActivities(using: searchContext.text)
     }
 
     var body: some View {
@@ -20,40 +15,51 @@ struct HomeScreen: View {
                 .ignoresSafeArea()
 
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: isSearching ? 16 : 24) {
-                    if isSearching == false {
-                        HomeHeaderSection(user: viewModel.user)
-                            .transition(.move(edge: .top).combined(with: .opacity))
-
-                        HomeBalanceSection(
-                            title: viewModel.balance.title,
-                            balance: viewModel.displayBalance,
-                            isBalanceHidden: viewModel.isBalanceHidden,
-                            onToggleVisibility: viewModel.toggleBalanceVisibility
-                        )
-                        .transition(.move(edge: .top).combined(with: .opacity))
-
-                        HomeQuickActionsSection(actions: viewModel.quickActions)
-                            .transition(.move(edge: .top).combined(with: .opacity))
+                VStack(alignment: .leading, spacing: 24) {
+                    Group {
+                        if searchContext.isSearching == false {
+                            mainSections
+                        }
                     }
+                    .animation(.easeInOut(duration: 0.30), value: searchContext.isSearching)
 
-                    HomeActivitySection(
-                        activities: visibleActivities,
-                        title: isSearching ? "Search Activities" : "Recent Activity",
-                        trailingTitle: isSearching ? nil : "See all"
-                    )
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    activitySection
 
                     Color.clear.frame(height: 110)
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, isSearching ? 8 : 18)
-                .animation(.spring(response: 0.35, dampingFraction: 0.86), value: isSearching)
+                .padding(.top, 18)
             }
         }
+    }
+
+    @ViewBuilder
+    private var mainSections: some View {
+        HomeHeaderSection(user: viewModel.user)
+            .transition(.opacity)
+
+        HomeBalanceSection(
+            title: viewModel.balance.title,
+            balance: viewModel.displayBalance,
+            isBalanceHidden: viewModel.isBalanceHidden,
+            onToggleVisibility: viewModel.toggleBalanceVisibility
+        )
+        .transition(.opacity)
+
+        HomeQuickActionsSection(actions: viewModel.quickActions)
+            .transition(.opacity)
+    }
+
+    private var activitySection: some View {
+        HomeActivitySection(
+            activities: visibleActivities,
+            title: searchContext.isSearching ? "Search Activities" : "Recent Activity",
+            trailingTitle: searchContext.isSearching ? nil : "See all"
+        )
+        .transition(.opacity)
     }
 }
 
 #Preview {
-    HomeScreen(searchText: "", isSearchPresented: false)
+    HomeScreen(searchContext: .empty)
 }

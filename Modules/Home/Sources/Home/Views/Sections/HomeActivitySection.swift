@@ -16,28 +16,9 @@ struct HomeActivitySection: View {
                     .padding(.vertical, 24)
                     .frame(maxWidth: .infinity, alignment: .center)
             } else {
-                VStack(spacing: 2) {
+                VStack(spacing: 8) {
                     ForEach(activities) { item in
-                        HStack(spacing: 12) {
-                            HomeActivityAvatar(avatarText: item.avatarText)
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(item.title)
-                                    .font(.headline.weight(.medium))
-                                    .foregroundStyle(.primary)
-
-                                Text(item.status.title)
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(.primary)
-                            }
-
-                            Spacer()
-
-                            Text(item.amountText)
-                                .font(.title3.weight(.semibold))
-                                .foregroundStyle(.primary)
-                        }
-                        .padding(.vertical, 8)
+                        HomeActivityRow(item: item)
 
                         if item.id != activities.last?.id {
                             Divider().overlay(.white.opacity(0.12))
@@ -46,6 +27,33 @@ struct HomeActivitySection: View {
                 }
             }
         }
+    }
+}
+
+private struct HomeActivityRow: View {
+    let item: ActivityItem
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            HomeActivityAvatar(avatarText: item.avatarText)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(item.title)
+                    .font(.headline.weight(.medium))
+                    .foregroundStyle(.primary)
+
+                Text(item.dateText)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 12)
+
+            Text(item.amountText)
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.primary)
+        }
+        .padding(.vertical, 12)
     }
 }
 

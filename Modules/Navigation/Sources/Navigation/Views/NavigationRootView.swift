@@ -1,5 +1,6 @@
 import SwiftUI
 import Home
+import Search
 import DesignSystem
 
 public struct NavigationRootView: View {
@@ -27,7 +28,7 @@ public struct NavigationRootView: View {
             }
 
             Tab(value: AppTab.search, role: .search) {
-                NavigationNativeSearchTabView(searchText: $searchText)
+                SearchFeatureView(searchText: $searchText)
             }
         }
         .tint(Color.ds.primary2)
