@@ -1,5 +1,6 @@
 import SwiftUI
 import Home
+import DesignSystem
 
 public struct NavigationRootView: View {
     @State private var selectedTab: AppTab = .home
@@ -29,7 +30,7 @@ public struct NavigationRootView: View {
                 NavigationNativeSearchTabView(searchText: $searchText)
             }
         }
-        .tint(Color(red: 0.78, green: 0.58, blue: 0.98))
+        .tint(Color.ds.primary2)
     }
 }
 

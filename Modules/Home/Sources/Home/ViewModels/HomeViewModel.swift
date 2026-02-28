@@ -20,19 +20,12 @@ final class HomeViewModel {
         QuickAction(id: "withdraw", title: "Withdraw", systemImage: "qrcode.viewfinder")
     ]
 
-    let promo = PromoHighlight(
-        title: "Discount up to",
-        discountText: "25%",
-        subtitle: "minimum transaction $500\nin IKEA with Credit Card",
-        dateRange: "25-29 June 2025",
-        legalText: "Term of Condition",
-        ctaTitle: "See Details"
-    )
-
     let activities: [ActivityItem] = [
         ActivityItem(id: "a1", title: "Transfer to Andi", status: .success, amountText: "$34", avatarText: "A"),
         ActivityItem(id: "a2", title: "Top Up to Klarna", status: .success, amountText: "$90", avatarText: "K."),
-        ActivityItem(id: "a3", title: "Transfer to From", status: .failed, amountText: "$27", avatarText: "F")
+        ActivityItem(id: "a3", title: "Transfer to Andry", status: .failed, amountText: "$27", avatarText: "C"),
+        ActivityItem(id: "a3", title: "Top Up to Aero", status: .success, amountText: "$16", avatarText: "G"),
+        ActivityItem(id: "a3", title: "Top Up to Cleber", status: .success, amountText: "$47", avatarText: "A"),
     ]
 
     var displayBalance: String {

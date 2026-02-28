@@ -18,7 +18,6 @@ struct HomeScreen: View {
                         onToggleVisibility: viewModel.toggleBalanceVisibility
                     )
                     HomeQuickActionsSection(actions: viewModel.quickActions)
-                    HomePromoSection(promo: viewModel.promo)
                     HomeActivitySection(activities: viewModel.activities)
                     Color.clear.frame(height: 110)
                 }

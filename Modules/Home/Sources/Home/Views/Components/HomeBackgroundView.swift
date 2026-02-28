@@ -8,14 +8,25 @@ struct HomeBackgroundView: View {
 
             RadialGradient(
                 colors: [
-                    Color.ds.primary1.opacity(0.78),
-                    Color.ds.primary1.opacity(0.28),
+                    Color.ds.primary1.opacity(0.36),
+                    Color.ds.primary1.opacity(0.14),
                     .clear
                 ],
-                center: .topTrailing,
-                startRadius: 20,
+                center: UnitPoint(x: 0.86, y: 0.02),
+                startRadius: 8,
                 endRadius: 360
             )
+
+            LinearGradient(
+                colors: [
+                    Color.ds.primary1.opacity(0.09),
+                    Color.ds.primary1.opacity(0.04),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
         }
     }
 }

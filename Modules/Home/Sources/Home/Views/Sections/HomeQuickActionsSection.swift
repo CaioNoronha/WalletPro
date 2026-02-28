@@ -10,6 +10,7 @@ struct HomeQuickActionsSection: View {
                     Image(systemName: action.systemImage)
                         .font(.title3.weight(.semibold))
                         .frame(width: 28, height: 28)
+
                     Text(action.title)
                         .font(.footnote.weight(.medium))
                         .lineLimit(1)
@@ -20,6 +21,6 @@ struct HomeQuickActionsSection: View {
             }
         }
         .padding(.horizontal, 10)
-        .background(.ultraThinMaterial, in: Capsule())
+        .glassEffect(.regular, in: Capsule())
     }
 }
