@@ -5,8 +5,17 @@ public struct SearchFeatureView: View {
     @Binding private var searchText: String
     @State private var isSearchPresented = true
 
-    public init(searchText: Binding<String>) {
+    private let autoFocusSearchField: Bool
+    private let searchEntryShouldAnimate: Bool
+
+    public init(
+        searchText: Binding<String>,
+        autoFocusSearchField: Bool = true,
+        searchEntryShouldAnimate: Bool = true
+    ) {
         self._searchText = searchText
+        self.autoFocusSearchField = autoFocusSearchField
+        self.searchEntryShouldAnimate = searchEntryShouldAnimate
     }
 
     public var body: some View {
@@ -14,7 +23,8 @@ public struct SearchFeatureView: View {
             HomeFeatureView(
                 searchText: searchText,
                 isSearchPresented: isSearchPresented,
-                presentationMode: .searchOnly
+                presentationMode: .searchOnly,
+                searchEntryShouldAnimate: searchEntryShouldAnimate
             )
         }
         .searchable(
@@ -26,7 +36,7 @@ public struct SearchFeatureView: View {
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .onAppear {
             DispatchQueue.main.async {
-                isSearchPresented = true
+                isSearchPresented = autoFocusSearchField
             }
         }
         .onDisappear {

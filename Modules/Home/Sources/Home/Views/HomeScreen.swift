@@ -8,6 +8,8 @@ struct HomeScreen: View {
     let searchContext: HomeSearchContext
     let presentationMode: HomeFeaturePresentationMode
     let entryTransition: DSMotion.HomeTransitions.Entry.Transition
+    let searchEntryShouldAnimate: Bool
+    let onSeeAllTap: (() -> Void)?
 
     private var visibleActivities: [ActivityItem] {
         viewModel.filteredActivities(using: searchContext.text)
@@ -56,7 +58,10 @@ struct HomeScreen: View {
             }
         }
         .onAppear {
-            transitionController.runSearchEntryTransitionIfNeeded(isSearchOnly: isSearchOnly)
+            transitionController.runSearchEntryTransitionIfNeeded(
+                isSearchOnly: isSearchOnly,
+                shouldAnimateFromHome: searchEntryShouldAnimate
+            )
         }
         .onChange(of: entryTransition) {
             transitionController.runHomeEntryTransitionIfNeeded(
@@ -81,13 +86,21 @@ struct HomeScreen: View {
 
         HomeQuickActionsSection(actions: viewModel.quickActions)
             .transition(.opacity)
+
+        HomeCardInvoiceSection(
+            invoice: viewModel.cardInvoice,
+            amountText: viewModel.displayCardInvoiceAmount,
+            availableLimitText: viewModel.displayCardAvailableLimit
+        )
+            .transition(.opacity)
     }
 
     private var activitySection: some View {
         HomeActivitySection(
             activities: visibleActivities,
             title: isSearchOnly ? "Recent Activity" : (searchContext.isSearching ? "Search Activities" : "Recent Activity"),
-            trailingTitle: isSearchOnly ? nil : "See all"
+            trailingTitle: isSearchOnly ? nil : "See all",
+            onSeeAllTap: isSearchOnly ? nil : onSeeAllTap
         )
         .transition(.opacity)
     }
@@ -97,6 +110,8 @@ struct HomeScreen: View {
     HomeScreen(
         searchContext: .empty,
         presentationMode: .full,
-        entryTransition: .none
+        entryTransition: .none,
+        searchEntryShouldAnimate: true,
+        onSeeAllTap: nil
     )
 }

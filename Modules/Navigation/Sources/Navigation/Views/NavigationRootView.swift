@@ -11,7 +11,12 @@ public struct NavigationRootView: View {
     public var body: some View {
         TabView(selection: selectedTabBinding) {
             Tab("Home", systemImage: "house", value: AppTab.home) {
-                HomeFeatureView(entryTransition: coordinator.homeEntryTransition)
+                HomeFeatureView(
+                    entryTransition: coordinator.homeEntryTransition,
+                    onSeeAllTap: {
+                        coordinator.openSearchListingAllTransactions()
+                    }
+                )
             }
 
             Tab("Rewards", systemImage: "gift", value: AppTab.rewards) {
@@ -23,7 +28,11 @@ public struct NavigationRootView: View {
             }
 
             Tab(value: AppTab.search, role: .search) {
-                SearchFeatureView(searchText: searchTextBinding)
+                SearchFeatureView(
+                    searchText: searchTextBinding,
+                    autoFocusSearchField: coordinator.searchAutoFocus,
+                    searchEntryShouldAnimate: coordinator.searchEntryShouldAnimate
+                )
             }
         }
         .tint(Color.ds.primary2)

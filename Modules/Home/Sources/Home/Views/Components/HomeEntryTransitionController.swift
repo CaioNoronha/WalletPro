@@ -9,8 +9,15 @@ final class HomeEntryTransitionController {
     var homeEntryInset: CGFloat = 0
     var searchEntryInset: CGFloat = DSMotion.HomeTransitions.Entry.sharedInset
 
-    func runSearchEntryTransitionIfNeeded(isSearchOnly: Bool) {
+    func runSearchEntryTransitionIfNeeded(
+        isSearchOnly: Bool,
+        shouldAnimateFromHome: Bool
+    ) {
         guard isSearchOnly else { return }
+        guard shouldAnimateFromHome else {
+            searchEntryInset = 0
+            return
+        }
 
         searchEntryInset = DSMotion.HomeTransitions.Entry.sharedInset
         withAnimation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.entrySlide)) {

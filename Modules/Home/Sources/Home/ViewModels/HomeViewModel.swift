@@ -8,9 +8,17 @@ final class HomeViewModel {
     var isBalanceHidden = false
 
     let balance = BalanceSummary(
-        title: "My Balance",
+        title: "Account Balance",
         amount: 3890.99,
         currencySymbol: "$"
+    )
+
+    let cardInvoice = CardInvoiceSummary(
+        title: "Card Statement",
+        amount: 1200.00,
+        availableLimit: 4000.00,
+        currencySymbol: "$",
+        isOpen: true
     )
 
     let quickActions: [QuickAction] = [
@@ -33,14 +41,23 @@ final class HomeViewModel {
             return "••••••••"
         }
 
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
+        return formatCurrency(balance.amount, symbol: balance.currencySymbol)
+    }
 
-        let value = NSDecimalNumber(decimal: balance.amount)
-        let amountText = formatter.string(from: value) ?? "0.00"
-        return "\(balance.currencySymbol)\(amountText)"
+    var displayCardInvoiceAmount: String {
+        if isBalanceHidden {
+            return "••••••••"
+        }
+
+        return formatCurrency(cardInvoice.amount, symbol: cardInvoice.currencySymbol)
+    }
+
+    var displayCardAvailableLimit: String {
+        if isBalanceHidden {
+            return "••••••••"
+        }
+
+        return formatCurrency(cardInvoice.availableLimit, symbol: cardInvoice.currencySymbol)
     }
 
     func filteredActivities(using query: String) -> [ActivityItem] {
@@ -61,5 +78,16 @@ final class HomeViewModel {
             || item.dateText.localizedCaseInsensitiveContains(query)
             || item.status.title.localizedCaseInsensitiveContains(query)
             || item.amountText.localizedCaseInsensitiveContains(query)
+    }
+
+    private func formatCurrency(_ amount: Decimal, symbol: String) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+
+        let value = NSDecimalNumber(decimal: amount)
+        let amountText = formatter.string(from: value) ?? "0.00"
+        return "\(symbol)\(amountText)"
     }
 }

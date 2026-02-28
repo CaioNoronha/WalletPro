@@ -4,10 +4,15 @@ struct HomeActivitySection: View {
     let activities: [ActivityItem]
     var title: String = "Recent Activity"
     var trailingTitle: String? = "See all"
+    var onSeeAllTap: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HomeSectionHeader(title: title, trailingTitle: trailingTitle)
+            HomeSectionHeader(
+                title: title,
+                trailingTitle: trailingTitle,
+                onTrailingTap: onSeeAllTap
+            )
 
             if activities.isEmpty {
                 Text("No activities found")

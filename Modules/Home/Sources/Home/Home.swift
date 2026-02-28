@@ -25,12 +25,16 @@ public struct HomeFeatureView: View {
     private let searchContext: HomeSearchContext
     private let presentationMode: HomeFeaturePresentationMode
     private let entryTransition: DSMotion.HomeTransitions.Entry.Transition
+    private let searchEntryShouldAnimate: Bool
+    private let onSeeAllTap: (() -> Void)?
 
     public init(
         searchText: String = "",
         isSearchPresented: Bool = false,
         presentationMode: HomeFeaturePresentationMode = .full,
-        entryTransition: DSMotion.HomeTransitions.Entry.Transition = .none
+        entryTransition: DSMotion.HomeTransitions.Entry.Transition = .none,
+        searchEntryShouldAnimate: Bool = true,
+        onSeeAllTap: (() -> Void)? = nil
     ) {
         self.searchContext = HomeSearchContext(
             text: searchText,
@@ -38,13 +42,17 @@ public struct HomeFeatureView: View {
         )
         self.presentationMode = presentationMode
         self.entryTransition = entryTransition
+        self.searchEntryShouldAnimate = searchEntryShouldAnimate
+        self.onSeeAllTap = onSeeAllTap
     }
 
     public var body: some View {
         HomeScreen(
             searchContext: searchContext,
             presentationMode: presentationMode,
-            entryTransition: entryTransition
+            entryTransition: entryTransition,
+            searchEntryShouldAnimate: searchEntryShouldAnimate,
+            onSeeAllTap: onSeeAllTap
         )
     }
 }

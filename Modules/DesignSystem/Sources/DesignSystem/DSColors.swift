@@ -10,5 +10,6 @@ public struct DSColors: Sendable {
     public var background: Color { Color("background", bundle: .main) }
     public var primary1: Color { Color("primary_1", bundle: .main) }
     public var primary2: Color { Color("primary_2", bundle: .main) }
+    public var secondary1: Color { Color("secondary_1", bundle: .main) }
     public var launchBackground: Color { Color("LaunchBackground", bundle: .main) }
 }

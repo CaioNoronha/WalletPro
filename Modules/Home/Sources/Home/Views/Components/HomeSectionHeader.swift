@@ -1,8 +1,10 @@
 import SwiftUI
+import DesignSystem
 
 struct HomeSectionHeader: View {
     let title: String
     let trailingTitle: String?
+    var onTrailingTap: (() -> Void)?
 
     var body: some View {
         HStack {
@@ -13,9 +15,18 @@ struct HomeSectionHeader: View {
             Spacer()
 
             if let trailingTitle {
-                Text(trailingTitle)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.primary)
+                if let onTrailingTap {
+                    Button(action: onTrailingTap) {
+                        Text(trailingTitle)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(Color.ds.primary1)
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    Text(trailingTitle)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(Color.ds.primary1)
+                }
             }
         }
     }
