@@ -1,11 +1,11 @@
 import SwiftUI
-import Home
+import Navigation
 
 @main
 struct WalletProApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeFeatureView()
+            NavigationRootView()
         }
     }
 }

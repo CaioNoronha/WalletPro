@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		30BFCECF2F527124003E513B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30BFCEC82F527124003E513B /* Assets.xcassets */; };
 		30BFCEE62F52779F003E513B /* WalletProApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFCEE52F52779F003E513B /* WalletProApp.swift */; };
-		30C100032F60000100AAA001 /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = 30C100052F60000100AAA001 /* Home */; };
+		30C100072F60000100AAA001 /* Navigation in Frameworks */ = {isa = PBXBuildFile; productRef = 30C100092F60000100AAA001 /* Navigation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30C100032F60000100AAA001 /* Home in Frameworks */,
+				30C100072F60000100AAA001 /* Navigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +136,7 @@
 			);
 			name = WalletPro;
 			packageProductDependencies = (
-				30C100052F60000100AAA001 /* Home */,
+				30C100092F60000100AAA001 /* Navigation */,
 			);
 			productName = WalletPro;
 			productReference = 30D10A862F5269D600C4A25A /* WalletPro.app */;
@@ -223,6 +223,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */,
+				30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 30D10A872F5269D600C4A25A /* Products */;
@@ -304,6 +305,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Modules/Home;
 		};
+		30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Navigation;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -311,6 +316,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 30C100042F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Home" */;
 			productName = Home;
+		};
+		30C100092F60000100AAA001 /* Navigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30C100082F60000100AAA001 /* XCLocalSwiftPackageReference "Modules/Navigation" */;
+			productName = Navigation;
 		};
 /* End XCSwiftPackageProductDependency section */
 

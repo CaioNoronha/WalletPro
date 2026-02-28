@@ -47,9 +47,3 @@ struct ActivityItem: Identifiable {
     let amountText: String
     let avatarText: String
 }
-
-struct FooterTabItem: Identifiable {
-    let id: String
-    let title: String
-    let systemImage: String
-}

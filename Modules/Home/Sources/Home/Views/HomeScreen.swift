@@ -4,7 +4,7 @@ struct HomeScreen: View {
     @State private var viewModel = HomeViewModel()
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             backgroundGradient
                 .ignoresSafeArea()
 
@@ -20,10 +20,6 @@ struct HomeScreen: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 18)
             }
-
-            footerSection
-                .padding(.horizontal, 18)
-                .padding(.bottom, 10)
         }
     }
 
@@ -280,29 +276,6 @@ struct HomeScreen: View {
             }
     }
 
-    private var footerSection: some View {
-        HStack(spacing: 4) {
-            ForEach(viewModel.footerTabs) { tab in
-                Button {
-                    viewModel.selectedFooterTabID = tab.id
-                } label: {
-                    VStack(spacing: 6) {
-                        Image(systemName: tab.systemImage)
-                            .font(.headline.weight(.medium))
-                        Text(tab.title)
-                            .font(.caption)
-                    }
-                    .foregroundStyle(viewModel.selectedFooterTabID == tab.id ? Color(red: 0.72, green: 0.50, blue: 1.0) : .white.opacity(0.7))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .background(.ultraThinMaterial, in: Capsule())
-    }
 }
 
 #Preview {

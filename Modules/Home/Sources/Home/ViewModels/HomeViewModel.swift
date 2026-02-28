@@ -37,16 +37,6 @@ final class HomeViewModel {
         ActivityItem(id: "a3", title: "Transfer to From", status: .failed, amountText: "$27", avatarText: "F")
     ]
 
-    let footerTabs: [FooterTabItem] = [
-        FooterTabItem(id: "home", title: "Home", systemImage: "house"),
-        FooterTabItem(id: "activity", title: "Activity", systemImage: "chart.bar.xaxis"),
-        FooterTabItem(id: "scan", title: "Scan QR", systemImage: "qrcode.viewfinder"),
-        FooterTabItem(id: "rewards", title: "Rewards", systemImage: "gift"),
-        FooterTabItem(id: "profile", title: "Profile", systemImage: "person.crop.circle")
-    ]
-
-    var selectedFooterTabID = "home"
-
     var formattedBalance: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
