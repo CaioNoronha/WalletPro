@@ -7,7 +7,7 @@ struct HomeCardInvoiceSection: View {
     let availableLimitText: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text(invoice.title)
                     .font(.headline.weight(.semibold))
@@ -31,12 +31,16 @@ struct HomeCardInvoiceSection: View {
                 }
             }
 
+            Spacer(minLength: 12)
+
             HStack(spacing: 8) {
                 Text(amountText)
                     .font(.title2).bold()
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
             }
+
+            Spacer(minLength: 12)
 
             Text("Available credit \(availableLimitText)")
                 .font(.subheadline.weight(.semibold))
