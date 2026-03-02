@@ -2,7 +2,7 @@ import SwiftUI
 import DesignSystem
 
 struct HomeQuickActionsSection: View {
-    let actions: [QuickAction]
+    let actions: [HomeQuickAction]
 
     var body: some View {
         quickActionsContent

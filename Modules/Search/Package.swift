@@ -15,13 +15,15 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../Home")
+        .package(path: "../Home"),
+        .package(path: "../Network")
     ],
     targets: [
         .target(
             name: "Search",
             dependencies: [
-                .product(name: "Home", package: "Home")
+                .product(name: "Home", package: "Home"),
+                .product(name: "Network", package: "Network")
             ]
         ),
         .testTarget(

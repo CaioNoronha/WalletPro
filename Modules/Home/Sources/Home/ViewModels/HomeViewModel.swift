@@ -1,63 +1,65 @@
 import Foundation
 import Observation
+import Utils
 
 @MainActor
 @Observable
-final class HomeViewModel {
-    let user = "Cooper"
+public final class HomeViewModel: HomeViewModelProtocol {
+    // MARK: - Variables
+
+    var state: HomeScreenState = .loading
     var isBalanceHidden = false
 
-    let balance = BalanceSummary(
-        title: "Account Balance",
-        amount: 3890.99,
-        currencySymbol: "$"
-    )
+    private var hasLoaded = false
+    private var homeData = HomeViewModel.mockedHomeData
 
-    let cardInvoice = CardInvoiceSummary(
-        title: "Card Statement",
-        amount: 1200.00,
-        availableLimit: 4000.00,
-        currencySymbol: "$",
-        isOpen: true
-    )
+    var user: String { homeData.user }
 
-    let quickActions: [QuickAction] = [
-        QuickAction(id: "topup", title: "Top Up", systemImage: "creditcard.and.123"),
-        QuickAction(id: "transfer", title: "Transfer", systemImage: "arrow.left.arrow.right"),
-        QuickAction(id: "bill", title: "Bill", systemImage: "doc.text"),
-        QuickAction(id: "withdraw", title: "Withdraw", systemImage: "qrcode.viewfinder")
-    ]
+    var balance: BalanceSummary {
+        homeData.balance
+    }
 
-    let activities: [ActivityItem] = [
-        ActivityItem(id: "a1", title: "Transfer to Andi", dateText: "21 fev. 2026", status: .success, amountText: "$34", avatarText: "A"),
-        ActivityItem(id: "a2", title: "Top Up to Klarna", dateText: "20 fev. 2026", status: .success, amountText: "$90", avatarText: "K."),
-        ActivityItem(id: "a3", title: "Transfer to Andry", dateText: "19 fev. 2026", status: .failed, amountText: "$27", avatarText: "C"),
-        ActivityItem(id: "a4", title: "Top Up to Aero", dateText: "18 fev. 2026", status: .success, amountText: "$16", avatarText: "G"),
-        ActivityItem(id: "a5", title: "Top Up to Cleber", dateText: "17 fev. 2026", status: .success, amountText: "$47", avatarText: "A")
-    ]
+    var cardInvoice: CardInvoiceSummary {
+        homeData.cardInvoice
+    }
+
+    var quickActions: [HomeQuickAction] { homeData.quickActions }
+    var activities: [ActivityItem] { homeData.activities }
 
     var displayBalance: String {
         if isBalanceHidden {
-            return "••••••••"
+            return Masking.hiddenAmount
         }
 
-        return formatCurrency(balance.amount, symbol: balance.currencySymbol)
+        return CurrencyFormatting.amount(balance.amount, currencySymbol: balance.currencySymbol)
     }
 
     var displayCardInvoiceAmount: String {
         if isBalanceHidden {
-            return "••••••••"
+            return Masking.hiddenAmount
         }
 
-        return formatCurrency(cardInvoice.amount, symbol: cardInvoice.currencySymbol)
+        return CurrencyFormatting.amount(cardInvoice.amount, currencySymbol: cardInvoice.currencySymbol)
     }
 
     var displayCardAvailableLimit: String {
         if isBalanceHidden {
-            return "••••••••"
+            return Masking.hiddenAmount
         }
 
-        return formatCurrency(cardInvoice.availableLimit, symbol: cardInvoice.currencySymbol)
+        return CurrencyFormatting.amount(cardInvoice.availableLimit, currencySymbol: cardInvoice.currencySymbol)
+    }
+
+    // MARK: - Initializer
+
+    init() {}
+
+    // MARK: - Methods
+
+    func loadIfNeeded() async {
+        guard hasLoaded == false else { return }
+        hasLoaded = true
+        state = .content
     }
 
     func filteredActivities(using query: String) -> [ActivityItem] {
@@ -80,14 +82,32 @@ final class HomeViewModel {
             || item.amountText.localizedCaseInsensitiveContains(query)
     }
 
-    private func formatCurrency(_ amount: Decimal, symbol: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-
-        let value = NSDecimalNumber(decimal: amount)
-        let amountText = formatter.string(from: value) ?? "0.00"
-        return "\(symbol)\(amountText)"
-    }
+    private static let mockedHomeData = HomeData(
+        user: "Cooper",
+        balance: BalanceSummary(
+            title: "Account Balance",
+            amount: 3890.99,
+            currencySymbol: "$"
+        ),
+        cardInvoice: CardInvoiceSummary(
+            title: "Card Statement",
+            amount: 1200.00,
+            availableLimit: 4000.00,
+            currencySymbol: "$",
+            isOpen: true
+        ),
+        quickActions: [
+            HomeQuickAction(id: "topup", title: "Top Up", systemImage: "creditcard.and.123"),
+            HomeQuickAction(id: "transfer", title: "Transfer", systemImage: "arrow.left.arrow.right"),
+            HomeQuickAction(id: "bill", title: "Bill", systemImage: "doc.text"),
+            HomeQuickAction(id: "withdraw", title: "Withdraw", systemImage: "qrcode.viewfinder")
+        ],
+        activities: [
+            ActivityItem(id: "a1", title: "Transfer to Andi", dateText: "21 fev. 2026", status: .success, amountText: "$34", avatarText: "A"),
+            ActivityItem(id: "a2", title: "Top Up to Klarna", dateText: "20 fev. 2026", status: .success, amountText: "$90", avatarText: "K."),
+            ActivityItem(id: "a3", title: "Transfer to Andry", dateText: "19 fev. 2026", status: .failed, amountText: "$27", avatarText: "C"),
+            ActivityItem(id: "a4", title: "Top Up to Aero", dateText: "18 fev. 2026", status: .success, amountText: "$16", avatarText: "G"),
+            ActivityItem(id: "a5", title: "Top Up to Cleber", dateText: "17 fev. 2026", status: .success, amountText: "$47", avatarText: "A")
+        ]
+    )
 }

@@ -2,7 +2,7 @@ import SwiftUI
 import DesignSystem
 
 struct HomeScreen: View {
-    @State private var viewModel = HomeViewModel()
+    @State private var viewModel: HomeViewModel
     @State private var transitionController = HomeEntryTransitionController()
 
     let searchContext: HomeSearchContext
@@ -10,6 +10,21 @@ struct HomeScreen: View {
     let entryTransition: DSMotion.HomeTransitions.Entry.Transition
     let searchEntryShouldAnimate: Bool
     let onSeeAllTap: (() -> Void)?
+
+    init(
+        searchContext: HomeSearchContext,
+        presentationMode: HomeFeaturePresentationMode,
+        entryTransition: DSMotion.HomeTransitions.Entry.Transition,
+        searchEntryShouldAnimate: Bool,
+        onSeeAllTap: (() -> Void)?
+    ) {
+        self.searchContext = searchContext
+        self.presentationMode = presentationMode
+        self.entryTransition = entryTransition
+        self.searchEntryShouldAnimate = searchEntryShouldAnimate
+        self.onSeeAllTap = onSeeAllTap
+        self._viewModel = State(initialValue: HomeViewModel())
+    }
 
     private var visibleActivities: [ActivityItem] {
         viewModel.filteredActivities(using: searchContext.text)
@@ -56,6 +71,9 @@ struct HomeScreen: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 18)
             }
+        }
+        .task {
+            await viewModel.loadIfNeeded()
         }
         .onAppear {
             transitionController.runSearchEntryTransitionIfNeeded(
