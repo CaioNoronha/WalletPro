@@ -48,6 +48,7 @@ public struct HomeFeatureView: View {
 
     public var body: some View {
         HomeScreen(
+            viewModel: HomeViewModel(),
             searchContext: searchContext,
             presentationMode: presentationMode,
             entryTransition: entryTransition,

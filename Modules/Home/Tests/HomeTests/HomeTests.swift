@@ -2,8 +2,9 @@ import Testing
 @testable import Home
 
 @MainActor
-@Test func filtersActivitiesByQuery() {
+@Test func filtersActivitiesByQuery() async {
     let viewModel = HomeViewModel()
+    await viewModel.loadIfNeeded()
 
     let titleMatches = viewModel.filteredActivities(using: "Klarna")
     #expect(titleMatches.count == 1)

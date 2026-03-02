@@ -1,8 +1,9 @@
 import SwiftUI
 import DesignSystem
+import Observation
 
-struct HomeScreen: View {
-    @State private var viewModel: HomeViewModel
+struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
+    @State private var viewModel: ViewModel
     @State private var transitionController = HomeEntryTransitionController()
 
     let searchContext: HomeSearchContext
@@ -12,6 +13,7 @@ struct HomeScreen: View {
     let onSeeAllTap: (() -> Void)?
 
     init(
+        viewModel: ViewModel,
         searchContext: HomeSearchContext,
         presentationMode: HomeFeaturePresentationMode,
         entryTransition: DSMotion.HomeTransitions.Entry.Transition,
@@ -23,7 +25,7 @@ struct HomeScreen: View {
         self.entryTransition = entryTransition
         self.searchEntryShouldAnimate = searchEntryShouldAnimate
         self.onSeeAllTap = onSeeAllTap
-        self._viewModel = State(initialValue: HomeViewModel())
+        self._viewModel = State(initialValue: viewModel)
     }
 
     private var visibleActivities: [ActivityItem] {
@@ -49,27 +51,41 @@ struct HomeScreen: View {
             HomeBackgroundView()
                 .ignoresSafeArea()
 
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 24) {
-                    Group {
-                        if shouldShowMainSections {
-                            mainSections
-                        }
-                    }
-                    .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.sectionFade), value: shouldShowMainSections)
-
-                    if effectiveActivitiesTopInset > 0 {
-                        Color.clear
-                            .frame(height: effectiveActivitiesTopInset)
-                            .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.entrySlide), value: effectiveActivitiesTopInset)
-                    }
-
-                    activitySection
-
-                    Color.clear.frame(height: 110)
+            switch viewModel.state {
+            case .loading:
+                ProgressView()
+                    .tint(.primary)
+            case .error:
+                VStack(spacing: 10) {
+                    Text("Could not load Home")
+                        .font(.headline.weight(.semibold))
+                    Text("Please try again.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 18)
+            case .content:
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 24) {
+                        Group {
+                            if shouldShowMainSections {
+                                mainSections
+                            }
+                        }
+                        .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.sectionFade), value: shouldShowMainSections)
+
+                        if effectiveActivitiesTopInset > 0 {
+                            Color.clear
+                                .frame(height: effectiveActivitiesTopInset)
+                                .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.entrySlide), value: effectiveActivitiesTopInset)
+                        }
+
+                        activitySection
+
+                        Color.clear.frame(height: 110)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 18)
+                }
             }
         }
         .task {
@@ -126,6 +142,7 @@ struct HomeScreen: View {
 
 #Preview {
     HomeScreen(
+        viewModel: HomeViewModel(),
         searchContext: .empty,
         presentationMode: .full,
         entryTransition: .none,

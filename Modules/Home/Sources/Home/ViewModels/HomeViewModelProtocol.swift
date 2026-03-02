@@ -1,8 +1,9 @@
 import Foundation
+import Utils
 
 @MainActor
 protocol HomeViewModelProtocol: AnyObject {
-    var state: HomeScreenState { get }
+    var state: ScreenState { get }
     var isBalanceHidden: Bool { get set }
 
     var user: String { get }
@@ -18,10 +19,4 @@ protocol HomeViewModelProtocol: AnyObject {
     func loadIfNeeded() async
     func filteredActivities(using query: String) -> [ActivityItem]
     func toggleBalanceVisibility()
-}
-
-enum HomeScreenState: Equatable {
-    case loading
-    case content
-    case error
 }
