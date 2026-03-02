@@ -34,7 +34,11 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     // MARK: - Initializer
 
-    init(worker: any HomeWorkerProtocol = HomeWorker()) {
+    public convenience init() {
+        self.init(worker: HomeWorker())
+    }
+
+    init(worker: any HomeWorkerProtocol) {
         self.worker = worker
     }
 

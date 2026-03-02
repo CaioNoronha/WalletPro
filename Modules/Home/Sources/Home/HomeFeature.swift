@@ -22,6 +22,7 @@ public enum HomeFeaturePresentationMode: Sendable {
 }
 
 public struct HomeFeatureView: View {
+    private let viewModel: HomeViewModel
     private let searchContext: HomeSearchContext
     private let presentationMode: HomeFeaturePresentationMode
     private let entryTransition: DSMotion.HomeTransitions.Entry.Transition
@@ -29,6 +30,7 @@ public struct HomeFeatureView: View {
     private let onSeeAllTap: (() -> Void)?
 
     public init(
+        viewModel: HomeViewModel = HomeViewModel(),
         searchText: String = "",
         isSearchPresented: Bool = false,
         presentationMode: HomeFeaturePresentationMode = .full,
@@ -36,6 +38,7 @@ public struct HomeFeatureView: View {
         searchEntryShouldAnimate: Bool = true,
         onSeeAllTap: (() -> Void)? = nil
     ) {
+        self.viewModel = viewModel
         self.searchContext = HomeSearchContext(
             text: searchText,
             isPresented: isSearchPresented
@@ -48,7 +51,7 @@ public struct HomeFeatureView: View {
 
     public var body: some View {
         HomeScreen(
-            viewModel: HomeViewModel(),
+            viewModel: viewModel,
             searchContext: searchContext,
             presentationMode: presentationMode,
             entryTransition: entryTransition,
