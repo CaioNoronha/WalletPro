@@ -1,10 +1,10 @@
 import Foundation
 
-protocol HomeDataProvider: Sendable {
+protocol HomeWorkerProtocol: Sendable {
     func fetchHomeData() async throws -> HomeData
 }
 
-struct MockHomeDataProvider: HomeDataProvider {
+struct HomeWorker: HomeWorkerProtocol {
     func fetchHomeData() async throws -> HomeData {
         HomeData(
             user: "Cooper",

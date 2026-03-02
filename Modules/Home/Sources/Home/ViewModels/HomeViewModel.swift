@@ -5,62 +5,37 @@ import Utils
 @MainActor
 @Observable
 public final class HomeViewModel: HomeViewModelProtocol {
+    
     // MARK: - Variables
-
     var state: ScreenState = .loading
     var isBalanceHidden = false
 
     private var hasLoaded = false
     private var homeData: HomeData?
-    private let dataProvider: any HomeDataProvider
+    private let worker: any HomeWorkerProtocol
 
-    var user: String { homeData?.user ?? "--" }
-
-    var balance: BalanceSummary {
-        homeData?.balance ?? BalanceSummary(title: "Account Balance", amount: 0, currencySymbol: "$")
-    }
-
-    var cardInvoice: CardInvoiceSummary {
-        homeData?.cardInvoice ?? CardInvoiceSummary(
-            title: "Card Statement",
-            amount: 0,
-            availableLimit: 0,
-            currencySymbol: "$",
-            isOpen: true
-        )
-    }
-
-    var quickActions: [HomeQuickAction] { homeData?.quickActions ?? [] }
-    var activities: [ActivityItem] { homeData?.activities ?? [] }
+    var user: String { data.user }
+    var balance: BalanceSummary { data.balance }
+    var cardInvoice: CardInvoiceSummary { data.cardInvoice }
+    var quickActions: [HomeQuickAction] { data.quickActions }
+    var activities: [ActivityItem] { data.activities }
 
     var displayBalance: String {
-        if isBalanceHidden {
-            return Masking.hiddenAmount
-        }
-
-        return CurrencyFormatting.amount(balance.amount, currencySymbol: balance.currencySymbol)
+        formattedAmount(balance.amount, currencySymbol: balance.currencySymbol)
     }
 
     var displayCardInvoiceAmount: String {
-        if isBalanceHidden {
-            return Masking.hiddenAmount
-        }
-
-        return CurrencyFormatting.amount(cardInvoice.amount, currencySymbol: cardInvoice.currencySymbol)
+        formattedAmount(cardInvoice.amount, currencySymbol: cardInvoice.currencySymbol)
     }
 
     var displayCardAvailableLimit: String {
-        if isBalanceHidden {
-            return Masking.hiddenAmount
-        }
-
-        return CurrencyFormatting.amount(cardInvoice.availableLimit, currencySymbol: cardInvoice.currencySymbol)
+        formattedAmount(cardInvoice.availableLimit, currencySymbol: cardInvoice.currencySymbol)
     }
 
     // MARK: - Initializer
 
-    init(dataProvider: any HomeDataProvider = MockHomeDataProvider()) {
-        self.dataProvider = dataProvider
+    init(worker: any HomeWorkerProtocol = HomeWorker()) {
+        self.worker = worker
     }
 
     // MARK: - Methods
@@ -71,7 +46,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
         state = .loading
 
         do {
-            homeData = try await dataProvider.fetchHomeData()
+            homeData = try await worker.fetchHomeData()
             state = .content
         } catch {
             state = .error
@@ -98,5 +73,32 @@ public final class HomeViewModel: HomeViewModelProtocol {
             || item.status.title.localizedCaseInsensitiveContains(query)
             || item.amountText.localizedCaseInsensitiveContains(query)
     }
+
+    private var data: HomeData {
+        homeData ?? Self.placeholderData
+    }
+
+    private func formattedAmount(_ amount: Decimal, currencySymbol: String) -> String {
+        guard isBalanceHidden == false else { return Masking.hiddenAmount }
+        return CurrencyFormatting.amount(amount, currencySymbol: currencySymbol)
+    }
+
+    private static let placeholderData = HomeData(
+        user: "--",
+        balance: BalanceSummary(
+            title: "Account Balance",
+            amount: 0,
+            currencySymbol: "$"
+        ),
+        cardInvoice: CardInvoiceSummary(
+            title: "Card Statement",
+            amount: 0,
+            availableLimit: 0,
+            currencySymbol: "$",
+            isOpen: true
+        ),
+        quickActions: [],
+        activities: []
+    )
 
 }
