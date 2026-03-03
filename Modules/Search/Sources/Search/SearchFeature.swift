@@ -44,20 +44,18 @@ public struct SearchFeatureView: View {
                 isSearchPresented = false
                 return
             }
-
-            Task { @MainActor in
-                // Small delay avoids competing with the first entry animation frame.
-                try? await Task.sleep(nanoseconds: 120_000_000)
-                isSearchPresented = true
-            }
+            isSearchPresented = true
         }
         .onDisappear {
             isSearchPresented = false
             searchText = ""
         }
     }
+}
 
-    private var mappedActivities: [ActivityItem] {
+// MARK: - Mapping
+private extension SearchFeatureView {
+    var mappedActivities: [ActivityItem] {
         viewModel.activities.map { item in
             ActivityItem(
                 id: item.id,

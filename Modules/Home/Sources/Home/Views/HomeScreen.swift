@@ -4,8 +4,8 @@ import Observation
 import Utils
 
 struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
-    @State private var viewModel: ViewModel
-    @State private var transitionController = HomeEntryTransitionController()
+    @State var viewModel: ViewModel
+    @State var transitionController = HomeEntryTransitionController()
 
     let searchContext: HomeSearchContext
     let searchActivitiesOverride: [ActivityItem]?
@@ -32,39 +32,6 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
         self._viewModel = State(initialValue: viewModel)
     }
 
-    private var visibleActivities: [ActivityItem] {
-        if isSearchOnly, let searchActivitiesOverride {
-            return filter(searchActivitiesOverride, using: searchContext.text)
-        }
-        return viewModel.filteredActivities(using: searchContext.text)
-    }
-
-    private var isSearchOnly: Bool {
-        presentationMode == .searchOnly
-    }
-
-    private var effectiveActivitiesTopInset: CGFloat {
-        isSearchOnly ? transitionController.searchEntryInset : transitionController.homeEntryInset
-    }
-
-    private var shouldShowMainSections: Bool {
-        isSearchOnly == false
-            && searchContext.isSearching == false
-            && transitionController.isAnimatingHomeEntry == false
-    }
-
-    private var shouldLoadHomeData: Bool {
-        !(isSearchOnly && searchActivitiesOverride != nil)
-    }
-
-    private var effectiveState: ScreenState {
-        shouldLoadHomeData ? viewModel.state : .content
-    }
-
-    private var hasSearchActivitiesForEntryAnimation: Bool {
-        (searchActivitiesOverride?.isEmpty == false)
-    }
-
     var body: some View {
         ZStack {
             HomeBackgroundView()
@@ -75,36 +42,9 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
                 ProgressView()
                     .tint(.primary)
             case .error:
-                VStack(spacing: 10) {
-                    Text("Could not load Home")
-                        .font(.headline.weight(.semibold))
-                    Text("Please try again.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+                errorStateView
             case .content:
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 24) {
-                        Group {
-                            if shouldShowMainSections {
-                                mainSections
-                            }
-                        }
-                        .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.sectionFade), value: shouldShowMainSections)
-
-                        if effectiveActivitiesTopInset > 0 {
-                            Color.clear
-                                .frame(height: effectiveActivitiesTopInset)
-                                .animation(.easeInOut(duration: DSMotion.HomeTransitions.Duration.entrySlide), value: effectiveActivitiesTopInset)
-                        }
-
-                        activitySection
-
-                        Color.clear.frame(height: 110)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 18)
-                }
+                contentView
             }
         }
         .task {
@@ -137,52 +77,6 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
                 isSearchOnly: isSearchOnly,
                 shouldAnimateFromHome: searchEntryShouldAnimate
             )
-        }
-    }
-
-    @ViewBuilder
-    private var mainSections: some View {
-        HomeHeaderSection(user: viewModel.user)
-            .transition(.opacity)
-
-        HomeBalanceSection(
-            title: viewModel.balance.title,
-            balance: viewModel.displayBalance,
-            isBalanceHidden: viewModel.isBalanceHidden,
-            onToggleVisibility: viewModel.toggleBalanceVisibility
-        )
-        .transition(.opacity)
-
-        HomeQuickActionsSection(actions: viewModel.quickActions)
-            .transition(.opacity)
-
-        HomeCardInvoiceSection(
-            invoice: viewModel.cardInvoice,
-            amountText: viewModel.displayCardInvoiceAmount,
-            availableLimitText: viewModel.displayCardAvailableLimit
-        )
-            .transition(.opacity)
-    }
-
-    private var activitySection: some View {
-        HomeActivitySection(
-            activities: visibleActivities,
-            title: isSearchOnly ? "Recent Activity" : (searchContext.isSearching ? "Search Activities" : "Recent Activity"),
-            trailingTitle: isSearchOnly ? nil : "See all",
-            onSeeAllTap: isSearchOnly ? nil : onSeeAllTap
-        )
-        .transition(.opacity)
-    }
-
-    private func filter(_ activities: [ActivityItem], using query: String) -> [ActivityItem] {
-        let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard normalizedQuery.isEmpty == false else { return activities }
-
-        return activities.filter { item in
-            item.title.localizedCaseInsensitiveContains(normalizedQuery)
-                || item.dateText.localizedCaseInsensitiveContains(normalizedQuery)
-                || item.status.title.localizedCaseInsensitiveContains(normalizedQuery)
-                || item.amountText.localizedCaseInsensitiveContains(normalizedQuery)
         }
     }
 }

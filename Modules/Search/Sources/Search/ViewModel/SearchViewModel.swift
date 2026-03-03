@@ -4,15 +4,22 @@ import Utils
 @MainActor
 @Observable
 final class SearchViewModel: SearchViewModelProtocol {
+
+    // MARK: - Variables
+
     var state: ScreenState = .loading
     var activities: [SearchActivity] = []
 
     private var hasLoaded = false
     private let worker: any SearchWorkerProtocol
 
+    // MARK: - Initializer
+
     init(worker: any SearchWorkerProtocol = SearchWorker.mocked()) {
         self.worker = worker
     }
+
+    // MARK: - Methods
 
     func loadActivitiesIfNeeded() async {
         guard hasLoaded == false else { return }

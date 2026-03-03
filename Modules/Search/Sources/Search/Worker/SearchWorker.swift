@@ -7,11 +7,18 @@ protocol SearchWorkerProtocol: Sendable {
 }
 
 struct SearchWorker: SearchWorkerProtocol {
+
+    // MARK: - Variables
+
     private let network: any NetworkManagerProtocol
+
+    // MARK: - Initializer
 
     init(network: any NetworkManagerProtocol) {
         self.network = network
     }
+
+    // MARK: - Methods
 
     func fetchActivities() async throws -> [SearchActivity] {
         let request = SearchActivitiesRequest().networkRequest
