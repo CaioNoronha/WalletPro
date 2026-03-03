@@ -36,12 +36,19 @@ public struct SearchFeatureView: View {
             prompt: "Search activities"
         )
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .task {
+        .task(priority: .utility) {
             await viewModel.loadActivitiesIfNeeded()
         }
         .onAppear {
-            DispatchQueue.main.async {
-                isSearchPresented = autoFocusSearchField
+            guard autoFocusSearchField else {
+                isSearchPresented = false
+                return
+            }
+
+            Task { @MainActor in
+                // Small delay avoids competing with the first entry animation frame.
+                try? await Task.sleep(nanoseconds: 120_000_000)
+                isSearchPresented = true
             }
         }
         .onDisappear {

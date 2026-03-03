@@ -1,6 +1,7 @@
 import SwiftUI
 import DesignSystem
 import Observation
+import Utils
 
 struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
     @State private var viewModel: ViewModel
@@ -52,12 +53,24 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
             && transitionController.isAnimatingHomeEntry == false
     }
 
+    private var shouldLoadHomeData: Bool {
+        !(isSearchOnly && searchActivitiesOverride != nil)
+    }
+
+    private var effectiveState: ScreenState {
+        shouldLoadHomeData ? viewModel.state : .content
+    }
+
+    private var hasSearchActivitiesForEntryAnimation: Bool {
+        (searchActivitiesOverride?.isEmpty == false)
+    }
+
     var body: some View {
         ZStack {
             HomeBackgroundView()
                 .ignoresSafeArea()
 
-            switch viewModel.state {
+            switch effectiveState {
             case .loading:
                 ProgressView()
                     .tint(.primary)
@@ -95,9 +108,14 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
             }
         }
         .task {
+            guard shouldLoadHomeData else { return }
             await viewModel.loadIfNeeded()
         }
         .onAppear {
+            if isSearchOnly, searchEntryShouldAnimate, hasSearchActivitiesForEntryAnimation == false {
+                return
+            }
+
             transitionController.runSearchEntryTransitionIfNeeded(
                 isSearchOnly: isSearchOnly,
                 shouldAnimateFromHome: searchEntryShouldAnimate
@@ -107,6 +125,17 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
             transitionController.runHomeEntryTransitionIfNeeded(
                 isSearchOnly: isSearchOnly,
                 entryTransition: entryTransition
+            )
+        }
+        .onChange(of: searchActivitiesOverride?.count ?? 0) { _, newValue in
+            guard isSearchOnly else { return }
+            guard searchEntryShouldAnimate else { return }
+            guard newValue > 0 else { return }
+            guard effectiveActivitiesTopInset > 0 else { return }
+
+            transitionController.runSearchEntryTransitionIfNeeded(
+                isSearchOnly: isSearchOnly,
+                shouldAnimateFromHome: searchEntryShouldAnimate
             )
         }
     }
