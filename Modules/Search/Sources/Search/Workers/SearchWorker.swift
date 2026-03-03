@@ -1,27 +1,31 @@
 import Foundation
 import Network
+import Utils
 
 protocol SearchWorkerProtocol: Sendable {
-    func fetchSuggestedQueries() async throws -> [String]
+    func fetchSuggestedQueries() async throws -> [SearchSuggestion]
 }
 
-struct SearchWorker: SearchWorkerProtocol {
-    private let client: any NetworkClient
+struct SearchWorker<Client: NetworkClient>: SearchWorkerProtocol {
+    private let client: Client
 
-    init(client: any NetworkClient) {
+    init(client: Client) {
         self.client = client
     }
 
-    func fetchSuggestedQueries() async throws -> [String] {
-        let request = NetworkRequest(path: "/search/suggestions", method: .get)
-        let payload = try await client.request(request, as: SuggestionsPayload.self)
-        return payload.queries
+    func fetchSuggestedQueries() async throws -> [SearchSuggestion] {
+        let request = SearchSuggestionsRequest()
+        return try await client.request(request.networkRequest, as: [SearchSuggestion].self)
     }
+}
 
-    static func liveMock() -> SearchWorker {
+//MARK: Search Mocked
+extension SearchWorker where Client == DefaultNetworkClient {
+    static func mocked() -> SearchWorker<DefaultNetworkClient> {
+        let request = SearchSuggestionsRequest()
         let transport = MockNetworkTransport(
             endpoints: [
-                MockRoute(method: .get, path: "/search/suggestions"): .jsonString(SearchWorkerMockData.suggestionsJSON)
+                MockRoute(method: request.method, path: request.path): .jsonString(MockPayloads.searchSuggestions)
             ]
         )
 

@@ -4,18 +4,32 @@ import Home
 public struct SearchFeatureView: View {
     @Binding private var searchText: String
     @State private var isSearchPresented = true
-    @State private var suggestedQueries: [String] = []
+    @State private var viewModel: SearchViewModel
 
     private let autoFocusSearchField: Bool
     private let searchEntryShouldAnimate: Bool
-    private let worker = SearchWorker.liveMock()
 
     public init(
         searchText: Binding<String>,
         autoFocusSearchField: Bool = true,
         searchEntryShouldAnimate: Bool = true
     ) {
+        self.init(
+            searchText: searchText,
+            viewModel: SearchViewModel(worker: SearchWorker.mocked()),
+            autoFocusSearchField: autoFocusSearchField,
+            searchEntryShouldAnimate: searchEntryShouldAnimate
+        )
+    }
+
+    init(
+        searchText: Binding<String>,
+        viewModel: SearchViewModel,
+        autoFocusSearchField: Bool,
+        searchEntryShouldAnimate: Bool
+    ) {
         self._searchText = searchText
+        self._viewModel = State(initialValue: viewModel)
         self.autoFocusSearchField = autoFocusSearchField
         self.searchEntryShouldAnimate = searchEntryShouldAnimate
     }
@@ -36,14 +50,14 @@ public struct SearchFeatureView: View {
             prompt: "Search activities"
         )
         .searchSuggestions {
-            ForEach(suggestedQueries, id: \.self) { query in
-                Text(query)
-                    .searchCompletion(query)
+            ForEach(viewModel.suggestedQueries) { suggestion in
+                Text(suggestion.text)
+                    .searchCompletion(suggestion.text)
             }
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .task {
-            await loadSuggestionsIfNeeded()
+            await viewModel.loadSuggestionsIfNeeded()
         }
         .onAppear {
             DispatchQueue.main.async {
@@ -53,14 +67,6 @@ public struct SearchFeatureView: View {
         .onDisappear {
             isSearchPresented = false
             searchText = ""
-        }
-    }
-
-    private func loadSuggestionsIfNeeded() async {
-        guard suggestedQueries.isEmpty else { return }
-
-        if let queries = try? await worker.fetchSuggestedQueries() {
-            suggestedQueries = queries
         }
     }
 }

@@ -16,14 +16,16 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Home"),
-        .package(path: "../Network")
+        .package(path: "../Network"),
+        .package(path: "../Utils")
     ],
     targets: [
         .target(
             name: "Search",
             dependencies: [
                 .product(name: "Home", package: "Home"),
-                .product(name: "Network", package: "Network")
+                .product(name: "Network", package: "Network"),
+                .product(name: "Utils", package: "Utils")
             ]
         ),
         .testTarget(
