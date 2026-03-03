@@ -6,30 +6,30 @@ protocol HomeWorkerProtocol: Sendable {
     func fetchHomeData() async throws -> HomeData
 }
 
-struct HomeWorker<Client: NetworkClient>: HomeWorkerProtocol {
-    private let client: Client
+struct HomeWorker: HomeWorkerProtocol {
+    private let network: any NetworkManagerProtocol
 
-    init(client: Client) {
-        self.client = client
+    init(network: any NetworkManagerProtocol) {
+        self.network = network
     }
 
     func fetchHomeData() async throws -> HomeData {
-        let request = HomeDashboardRequest()
-        return try await client.request(request.networkRequest, as: HomeData.self)
+        let request = HomeDashboardRequest().networkRequest
+        let data = try await network.executeRequest(request: request)
+        return try JSONParser.parse(data, from: HomeData.self)
     }
-
 }
 
 // MARK: - Mocked Home
-extension HomeWorker where Client == DefaultNetworkClient {
-    static func mocked() -> HomeWorker<DefaultNetworkClient> {
-        let request = HomeDashboardRequest()
-        let transport = MockNetworkTransport(
-            endpoints: [
-                MockRoute(method: request.method, path: request.path): .jsonString(MockPayloads.homeDashboard)
+extension HomeWorker {
+    static func mocked() -> HomeWorker {
+        let request = HomeDashboardRequest().networkRequest
+        let network = NetworkManagerMock(
+            jsonByRoute: [
+                request.routeKey: MockPayloads.homeDashboard
             ]
         )
-        let client = DefaultNetworkClient(transport: transport)
-        return HomeWorker(client: client)
+
+        return HomeWorker(network: network)
     }
 }

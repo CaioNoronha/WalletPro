@@ -6,30 +6,30 @@ protocol SearchWorkerProtocol: Sendable {
     func fetchSuggestedQueries() async throws -> [SearchSuggestion]
 }
 
-struct SearchWorker<Client: NetworkClient>: SearchWorkerProtocol {
-    private let client: Client
+struct SearchWorker: SearchWorkerProtocol {
+    private let network: any NetworkManagerProtocol
 
-    init(client: Client) {
-        self.client = client
+    init(network: any NetworkManagerProtocol) {
+        self.network = network
     }
 
     func fetchSuggestedQueries() async throws -> [SearchSuggestion] {
-        let request = SearchSuggestionsRequest()
-        return try await client.request(request.networkRequest, as: [SearchSuggestion].self)
+        let request = SearchSuggestionsRequest().networkRequest
+        let data = try await network.executeRequest(request: request)
+        return try JSONParser.parse(data, from: [SearchSuggestion].self)
     }
 }
 
-//MARK: Search Mocked
-extension SearchWorker where Client == DefaultNetworkClient {
-    static func mocked() -> SearchWorker<DefaultNetworkClient> {
-        let request = SearchSuggestionsRequest()
-        let transport = MockNetworkTransport(
-            endpoints: [
-                MockRoute(method: request.method, path: request.path): .jsonString(MockPayloads.searchSuggestions)
+// MARK: - Search Mocked
+extension SearchWorker {
+    static func mocked() -> SearchWorker {
+        let request = SearchSuggestionsRequest().networkRequest
+        let network = NetworkManagerMock(
+            jsonByRoute: [
+                request.routeKey: MockPayloads.searchSuggestions
             ]
         )
 
-        let client = DefaultNetworkClient(transport: transport)
-        return SearchWorker(client: client)
+        return SearchWorker(network: network)
     }
 }
