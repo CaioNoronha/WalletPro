@@ -4,6 +4,7 @@ import Home
 public struct SearchFeatureView: View {
     @Binding private var searchText: String
     @State private var isSearchPresented = true
+    @State private var viewModel = SearchViewModel()
 
     private let autoFocusSearchField: Bool
     private let searchEntryShouldAnimate: Bool
@@ -23,6 +24,7 @@ public struct SearchFeatureView: View {
             HomeFeatureView(
                 searchText: searchText,
                 isSearchPresented: isSearchPresented,
+                searchActivitiesOverride: mappedActivities,
                 presentationMode: .searchOnly,
                 searchEntryShouldAnimate: searchEntryShouldAnimate
             )
@@ -34,6 +36,9 @@ public struct SearchFeatureView: View {
             prompt: "Search activities"
         )
         .ignoresSafeArea(.keyboard, edges: .bottom)
+        .task {
+            await viewModel.loadActivitiesIfNeeded()
+        }
         .onAppear {
             DispatchQueue.main.async {
                 isSearchPresented = autoFocusSearchField
@@ -42,6 +47,19 @@ public struct SearchFeatureView: View {
         .onDisappear {
             isSearchPresented = false
             searchText = ""
+        }
+    }
+
+    private var mappedActivities: [ActivityItem] {
+        viewModel.activities.map { item in
+            ActivityItem(
+                id: item.id,
+                title: item.title,
+                dateText: item.dateText,
+                status: ActivityStatus(rawValue: item.status.lowercased()) ?? .success,
+                amountText: item.amountText,
+                avatarText: item.avatarText
+            )
         }
     }
 }

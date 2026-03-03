@@ -7,6 +7,7 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
     @State private var transitionController = HomeEntryTransitionController()
 
     let searchContext: HomeSearchContext
+    let searchActivitiesOverride: [ActivityItem]?
     let presentationMode: HomeFeaturePresentationMode
     let entryTransition: DSMotion.HomeTransitions.Entry.Transition
     let searchEntryShouldAnimate: Bool
@@ -15,12 +16,14 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
     init(
         viewModel: ViewModel,
         searchContext: HomeSearchContext,
+        searchActivitiesOverride: [ActivityItem]?,
         presentationMode: HomeFeaturePresentationMode,
         entryTransition: DSMotion.HomeTransitions.Entry.Transition,
         searchEntryShouldAnimate: Bool,
         onSeeAllTap: (() -> Void)?
     ) {
         self.searchContext = searchContext
+        self.searchActivitiesOverride = searchActivitiesOverride
         self.presentationMode = presentationMode
         self.entryTransition = entryTransition
         self.searchEntryShouldAnimate = searchEntryShouldAnimate
@@ -29,7 +32,10 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
     }
 
     private var visibleActivities: [ActivityItem] {
-        viewModel.filteredActivities(using: searchContext.text)
+        if isSearchOnly, let searchActivitiesOverride {
+            return filter(searchActivitiesOverride, using: searchContext.text)
+        }
+        return viewModel.filteredActivities(using: searchContext.text)
     }
 
     private var isSearchOnly: Bool {
@@ -138,12 +144,25 @@ struct HomeScreen<ViewModel: HomeViewModelProtocol & Observable>: View {
         )
         .transition(.opacity)
     }
+
+    private func filter(_ activities: [ActivityItem], using query: String) -> [ActivityItem] {
+        let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard normalizedQuery.isEmpty == false else { return activities }
+
+        return activities.filter { item in
+            item.title.localizedCaseInsensitiveContains(normalizedQuery)
+                || item.dateText.localizedCaseInsensitiveContains(normalizedQuery)
+                || item.status.title.localizedCaseInsensitiveContains(normalizedQuery)
+                || item.amountText.localizedCaseInsensitiveContains(normalizedQuery)
+        }
+    }
 }
 
 #Preview {
     HomeScreen(
         viewModel: HomeViewModel(),
         searchContext: .empty,
+        searchActivitiesOverride: nil,
         presentationMode: .full,
         entryTransition: .none,
         searchEntryShouldAnimate: true,

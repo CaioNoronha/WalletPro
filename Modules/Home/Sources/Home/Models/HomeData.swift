@@ -1,21 +1,37 @@
 import Foundation
 
 // MARK: - Activity Item
-struct ActivityItem: Identifiable, Decodable, Sendable {
-    let id: String
+public struct ActivityItem: Identifiable, Decodable, Sendable {
+    public let id: String
     let title: String
     let dateText: String
     let status: ActivityStatus
     let amountText: String
     let avatarText: String
+
+    public init(
+        id: String,
+        title: String,
+        dateText: String,
+        status: ActivityStatus,
+        amountText: String,
+        avatarText: String
+    ) {
+        self.id = id
+        self.title = title
+        self.dateText = dateText
+        self.status = status
+        self.amountText = amountText
+        self.avatarText = avatarText
+    }
 }
 
 // MARK: - Activity Status
-enum ActivityStatus: String, Decodable, Sendable {
+public enum ActivityStatus: String, Decodable, Sendable {
     case success
     case failed
 
-    var title: String {
+    public var title: String {
         switch self {
         case .success:
             "Success"
