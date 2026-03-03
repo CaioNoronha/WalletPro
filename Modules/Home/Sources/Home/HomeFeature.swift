@@ -6,7 +6,7 @@ struct HomeSearchContext {
     let isPresented: Bool
 
     var isSearching: Bool {
-        isPresented || normalizedText.isEmpty == false
+        normalizedText.isEmpty == false
     }
 
     var normalizedText: String {

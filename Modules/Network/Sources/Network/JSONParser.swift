@@ -5,7 +5,7 @@ public enum JSONParser {
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            throw NetworkError.invalidData
+            throw NetworkError.decodingFailure(error.localizedDescription)
         }
     }
 }

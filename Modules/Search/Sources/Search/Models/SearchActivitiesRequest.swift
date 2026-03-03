@@ -1,7 +1,7 @@
 import Network
 
-struct SearchSuggestionsRequest {
-    let path = "/search/suggestions"
+struct SearchActivitiesRequest {
+    let path = "/search/activities"
     let method: HTTPMethod = .get
 
     var networkRequest: NetworkRequest {

@@ -4,7 +4,6 @@ import Home
 public struct SearchFeatureView: View {
     @Binding private var searchText: String
     @State private var isSearchPresented = true
-    @State private var viewModel: SearchViewModel
 
     private let autoFocusSearchField: Bool
     private let searchEntryShouldAnimate: Bool
@@ -14,22 +13,7 @@ public struct SearchFeatureView: View {
         autoFocusSearchField: Bool = true,
         searchEntryShouldAnimate: Bool = true
     ) {
-        self.init(
-            searchText: searchText,
-            viewModel: SearchViewModel(worker: SearchWorker.mocked()),
-            autoFocusSearchField: autoFocusSearchField,
-            searchEntryShouldAnimate: searchEntryShouldAnimate
-        )
-    }
-
-    init(
-        searchText: Binding<String>,
-        viewModel: SearchViewModel,
-        autoFocusSearchField: Bool,
-        searchEntryShouldAnimate: Bool
-    ) {
         self._searchText = searchText
-        self._viewModel = State(initialValue: viewModel)
         self.autoFocusSearchField = autoFocusSearchField
         self.searchEntryShouldAnimate = searchEntryShouldAnimate
     }
@@ -49,16 +33,7 @@ public struct SearchFeatureView: View {
             placement: .automatic,
             prompt: "Search activities"
         )
-        .searchSuggestions {
-            ForEach(viewModel.suggestedQueries) { suggestion in
-                Text(suggestion.text)
-                    .searchCompletion(suggestion.text)
-            }
-        }
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .task {
-            await viewModel.loadSuggestionsIfNeeded()
-        }
         .onAppear {
             DispatchQueue.main.async {
                 isSearchPresented = autoFocusSearchField

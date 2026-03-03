@@ -4,17 +4,17 @@ import Testing
 import Utils
 
 private struct SuccessSearchWorker: SearchWorkerProtocol {
-    func fetchSuggestedQueries() async throws -> [SearchSuggestion] {
+    func fetchActivities() async throws -> [SearchActivity] {
         [
-            SearchSuggestion(text: "Transfer"),
-            SearchSuggestion(text: "Klarna")
+            SearchActivity(id: "a1", title: "Transfer", dateText: "21 fev. 2026", status: "success", amountText: "$34", avatarText: "A"),
+            SearchActivity(id: "a2", title: "Klarna", dateText: "20 fev. 2026", status: "success", amountText: "$90", avatarText: "K")
         ]
     }
 }
 
 private struct FailureSearchWorker: SearchWorkerProtocol {
     struct MockError: Error {}
-    func fetchSuggestedQueries() async throws -> [SearchSuggestion] {
+    func fetchActivities() async throws -> [SearchActivity] {
         throw MockError()
     }
 }
@@ -26,18 +26,27 @@ private struct FailureSearchWorker: SearchWorkerProtocol {
 }
 
 @MainActor
-@Test func loadSuggestionsSuccessSetsContentState() async {
+@Test func loadActivitiesSuccessSetsContentState() async {
     let viewModel = SearchViewModel(worker: SuccessSearchWorker())
-    await viewModel.loadSuggestionsIfNeeded()
+    await viewModel.loadActivitiesIfNeeded()
 
     #expect(viewModel.state == .content)
-    #expect(viewModel.suggestedQueries.count == 2)
+    #expect(viewModel.activities.count == 2)
 }
 
 @MainActor
-@Test func loadSuggestionsFailureSetsErrorState() async {
+@Test func loadActivitiesFailureSetsErrorState() async {
     let viewModel = SearchViewModel(worker: FailureSearchWorker())
-    await viewModel.loadSuggestionsIfNeeded()
+    await viewModel.loadActivitiesIfNeeded()
 
     #expect(viewModel.state == .error)
+}
+
+@MainActor
+@Test func filtersActivitiesByQuery() async {
+    let viewModel = SearchViewModel(worker: SuccessSearchWorker())
+    await viewModel.loadActivitiesIfNeeded()
+
+    let filtered = viewModel.filteredActivities(using: "Klarna")
+    #expect(filtered.count == 1)
 }
