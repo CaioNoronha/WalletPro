@@ -56,7 +56,7 @@ public struct SearchFeatureView: View {
                 id: item.id,
                 title: item.title,
                 dateText: item.dateText,
-                status: ActivityStatus(rawValue: item.status.lowercased()) ?? .success,
+                status: item.status,
                 amountText: item.amountText,
                 avatarText: item.avatarText
             )

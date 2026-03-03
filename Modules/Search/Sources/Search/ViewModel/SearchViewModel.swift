@@ -35,7 +35,7 @@ final class SearchViewModel: SearchViewModelProtocol {
         return activities.filter { item in
             item.title.localizedCaseInsensitiveContains(normalizedQuery)
                 || item.dateText.localizedCaseInsensitiveContains(normalizedQuery)
-                || item.status.localizedCaseInsensitiveContains(normalizedQuery)
+                || item.status.title.localizedCaseInsensitiveContains(normalizedQuery)
                 || item.amountText.localizedCaseInsensitiveContains(normalizedQuery)
         }
     }

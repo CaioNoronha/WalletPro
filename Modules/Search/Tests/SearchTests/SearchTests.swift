@@ -2,12 +2,13 @@ import SwiftUI
 import Testing
 @testable import Search
 import Utils
+import Home
 
 private struct SuccessSearchWorker: SearchWorkerProtocol {
     func fetchActivities() async throws -> [SearchActivity] {
         [
-            SearchActivity(id: "a1", title: "Transfer", dateText: "21 fev. 2026", status: "success", amountText: "$34", avatarText: "A"),
-            SearchActivity(id: "a2", title: "Klarna", dateText: "20 fev. 2026", status: "success", amountText: "$90", avatarText: "K")
+            SearchActivity(id: "a1", title: "Transfer", dateText: "21 fev. 2026", status: .success, amountText: "$34", avatarText: "A"),
+            SearchActivity(id: "a2", title: "Klarna", dateText: "20 fev. 2026", status: .success, amountText: "$90", avatarText: "K")
         ]
     }
 }
