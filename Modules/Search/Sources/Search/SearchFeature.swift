@@ -44,7 +44,12 @@ public struct SearchFeatureView: View {
                 isSearchPresented = false
                 return
             }
-            isSearchPresented = true
+
+            Task { @MainActor in
+                // Delay helps avoid first-frame contention between keyboard and entry animation.
+                try? await Task.sleep(nanoseconds: 120_000_000)
+                isSearchPresented = true
+            }
         }
         .onDisappear {
             isSearchPresented = false
